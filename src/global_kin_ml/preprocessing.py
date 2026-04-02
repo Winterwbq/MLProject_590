@@ -103,6 +103,38 @@ class FullNonconstantFeatureTransformer:
         }
 
 
+class AllInputsFeatureTransformer:
+    name = "all_inputs_plus_log_en"
+
+    def __init__(self) -> None:
+        self.selected_columns_: list[str] | None = None
+
+    def fit(self, input_frame: pd.DataFrame) -> "AllInputsFeatureTransformer":
+        self.selected_columns_ = [
+            column for column in input_frame.columns if column.startswith(INPUT_PREFIX)
+        ]
+        return self
+
+    def transform(self, input_frame: pd.DataFrame) -> pd.DataFrame:
+        if self.selected_columns_ is None:
+            raise RuntimeError("Feature transformer must be fit before transform.")
+        transformed = pd.DataFrame(index=input_frame.index)
+        transformed["log10_e_over_n"] = np.log10(input_frame["e_over_n_v_cm2"].to_numpy(dtype=float))
+        for column in self.selected_columns_:
+            transformed[column] = input_frame[column].to_numpy(dtype=float)
+        return transformed
+
+    def metadata(self) -> dict[str, object]:
+        if self.selected_columns_ is None:
+            raise RuntimeError("Feature transformer must be fit before metadata.")
+        return {
+            "feature_set": self.name,
+            "feature_count": len(self.selected_columns_) + 1,
+            "component_count": 0,
+            "selected_columns": ",".join(self.selected_columns_),
+        }
+
+
 class CompositionPCAFeatureTransformer:
     name = "composition_pca_plus_log_en"
 
@@ -164,6 +196,8 @@ class CompositionPCAFeatureTransformer:
 
 
 def build_feature_transformer(feature_set_name: str):
+    if feature_set_name == AllInputsFeatureTransformer.name:
+        return AllInputsFeatureTransformer()
     if feature_set_name == FullNonconstantFeatureTransformer.name:
         return FullNonconstantFeatureTransformer()
     if feature_set_name == CompositionPCAFeatureTransformer.name:
