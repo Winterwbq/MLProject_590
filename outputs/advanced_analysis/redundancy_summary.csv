@@ -1,0 +1,5 @@
+metric,value,note
+constant_input_feature_count,14,Input species that never change across the 609 cases.
+nonconstant_input_feature_count,35,Input species with at least two distinct values across the 609 cases.
+near_perfect_input_pairs_abs_corr_ge_0_95,54,Highly redundant composition-feature pairs among the top correlations.
+near_perfect_reaction_pairs_abs_corr_ge_0_95,202,Highly redundant reaction pairs among the 30 most variable targets.

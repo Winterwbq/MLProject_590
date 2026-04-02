@@ -1,0 +1,3 @@
+matrix_name,effective_rank,components_for_80pct,components_for_90pct,components_for_95pct,components_for_99pct
+composition_inputs,3.7870967727215805,3,3,4,6
+log_rate_constants,1.7321341361289946,1,2,3,6

@@ -1,0 +1,4 @@
+transform,overall_min,overall_median,overall_mean,overall_max,mean_reaction_skewness,median_reaction_skewness,mean_abs_reaction_skewness,mean_reaction_kurtosis,median_reaction_kurtosis,note
+raw_rate_const,0.0,5.8705e-10,4.079314121889314e-05,0.006326,0.07579692113141497,0.0,0.5339573001840914,0.3522699413591813,0.0,Lower absolute skewness usually indicates a friendlier target transform for regression.
+log10_rate_const_plus_eps,-46.57430278663741,-9.23132490918736,-14.164572444116464,-2.198870812420296,-1.1253832270122925,-1.4227854010657075,1.6053991124607097,1.7568348187125808,0.14819582788859353,Lower absolute skewness usually indicates a friendlier target transform for regression.
+asinh_rate_const_scaled,0.0,86.67853136918285,75.22803696638508,102.8713553395636,-1.1262674974467382,-1.4232266760310008,1.6062744554456159,1.7608909850257533,0.14819582788860775,Lower absolute skewness usually indicates a friendlier target transform for regression.

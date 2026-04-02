@@ -1,0 +1,4 @@
+split_strategy,test_descriptor,train_size,test_size
+random_case_split,20 percent random holdout of the 609 cases,487,122
+density_group_holdout,"held-out density groups: [1, 2, 9, 16, 18]",464,145
+local_case_holdout,"held-out local_case_id values: [9, 10, 13, 17, 23, 28]",483,126

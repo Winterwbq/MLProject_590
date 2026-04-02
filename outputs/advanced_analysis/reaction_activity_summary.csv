@@ -1,0 +1,205 @@
+target_column,reaction_id,reaction_label,nonzero_fraction,active_case_count,active_density_group_count,is_always_zero,is_always_nonzero,min_first_active_local_case,median_first_active_local_case,max_first_active_local_case,median_last_active_local_case,mean_active_local_case_count
+rate_const_001,1,AR3S-ELASTIC,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_015,15,AR4SM-ELASTIC,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_016,16,AR4SM > AR3S,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_017,17,AR4SM > AR4SR,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_018,18,AR4SM > AR4SPM,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_019,19,AR4SM > AR4SPR,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_023,23,AR4SR-ELASTIC,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_024,24,AR4SR > AR3S,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_025,25,AR4SR > AR4SM,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_026,26,AR4SR > AR4SPM,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_027,27,AR4SR > AR4SPR,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_031,31,AR4SPM-ELASTIC,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_032,32,AR4SPM > AR3S,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_033,33,AR4SPM > AR4SM,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_034,34,AR4SPM > AR4SR,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_035,35,AR4SPM > AR4SPR,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_039,39,AR4SPR-ELASTIC,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_040,40,AR4SPR > AR3S,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_041,41,AR4SPR > AR4SM,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_042,42,AR4SPR > AR4SR,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_043,43,AR4SPR > AR4SPM,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_047,47,AR4P-ELASTIC,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_048,48,AR4P > AR3S,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_049,49,AR4P > AR4SM,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_050,50,AR4P > AR4SR,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_051,51,AR4P > AR4SPM,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_052,52,AR4P > AR4SPR,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_055,55,AR4D-ELASTIC,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_056,56,AR4D > AR3S,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_057,57,AR4D > AR4SM,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_058,58,AR4D > AR4SR,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_059,59,AR4D > AR4SPM,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_060,60,AR4D > AR4SPR,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_061,61,"AR4D > AR4P,3D,5S,5P",1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_063,63,AR+ -ELASTIC,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_064,64,AR+ -RECOMBINATION,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_066,66,AR2+ -MOMTIC,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_067,67,AR2+ -RECOMBINATION,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_068,68,H -ELASTIC,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_073,73,H* -ELASTIC,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_074,74,H*  > H,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_078,78,H+ -ELASTIC,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_079,79,H+ -RECOMBINATION,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_080,80,H- -ELASTIC,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_082,82,H2-ELASTIC,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_083,83,H2-ROTATIONAL (0-2),1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_084,84,H2-ROTATIONAL (1-3),1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_085,85,H2 > H2(V=1),1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_093,93,H2* -ELASTIC,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_094,94,H2*  > H2,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_096,96,H2+ -ELASTIC,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_097,97,H2+ > H+ + H,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_098,98,H2+ > H + H,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_099,99,H2+ > H+ + H-,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_100,100,H3+ -ELASTIC,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_102,102,H3+ > H + H2,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_103,103,H3+ > H2 + H,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_104,104,H3+ > H + H + H,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_106,106,OH-MOM TRANS,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_126,126,OH- -MOM,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_128,128,E + H2O-MOMENTUM TRANSFER,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_129,129,E + H2O > H2OV(100) + E,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_130,130,E + H2O > H2OV(010) + E,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_131,131,E + H2O > H2OV(001) + E,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_147,147,E + H2OV-MOMENTUM TRANSFER,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_148,148,E + H2OV(100) > H2O+E x 1e-10,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_149,149,E + H2OV(010) > H2O+E x 1e-10,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_150,150,E + H2OV(001) > H2O+E x 1e-10,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_166,166,E + H2OV > H2O+E (average),1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_167,167,H2O+ -MOMTIC,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_168,168,H2O+ -RECOMBINATION,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_169,169,H2O2-MOM,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_170,170,H2O2 > H2O + O-,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_171,171,H2O2 > OH + OH-,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_172,172,O2-MOMENTUM,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_174,174,O2-ROTATIONAL,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_175,175,O2-VIB 1,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_176,176,O2-VIB 2,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_177,177,O2-VIB 3,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_178,178,O2-VIB 4,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_190,190,O2+ -ELASTIC,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_191,191,O2+ -RECOMBINATION,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_192,192,O2- -MOMENTUM TRANSFER,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_194,194,O-MOMENTUM,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_202,202,O+ -ELASTIC,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_203,203,O- ELASTIC,1.0,609,21,False,True,1.0,1.0,1.0,29.0,29.0
+rate_const_020,20,"AR4SM>AR4P,3D,5S,5P",0.9655172413793104,588,21,False,False,2.0,2.0,2.0,29.0,28.0
+rate_const_028,28,"AR4SR>AR4P,3D,5S,5P",0.9655172413793104,588,21,False,False,2.0,2.0,2.0,29.0,28.0
+rate_const_036,36,"AR4SPM>AR4P,3D,5S,5P",0.9655172413793104,588,21,False,False,2.0,2.0,2.0,29.0,28.0
+rate_const_044,44,"AR4SPR>AR4P,3D,5S,5P",0.9655172413793104,588,21,False,False,2.0,2.0,2.0,29.0,28.0
+rate_const_053,53,"AR4P > AR4D,6S,RYD",0.9655172413793104,588,21,False,False,2.0,2.0,2.0,29.0,28.0
+rate_const_062,62,AR4D > AR^,0.9655172413793104,588,21,False,False,2.0,2.0,2.0,29.0,28.0
+rate_const_075,75,H*  > H**,0.9655172413793104,588,21,False,False,2.0,2.0,2.0,29.0,28.0
+rate_const_081,81,H- -DETACHMENT,0.9655172413793104,588,21,False,False,2.0,2.0,2.0,29.0,28.0
+rate_const_107,107,OH-V1,0.9655172413793104,588,21,False,False,2.0,2.0,2.0,29.0,28.0
+rate_const_179,179,O2-SINGLET DELTA,0.9655172413793104,588,21,False,False,2.0,2.0,2.0,29.0,28.0
+rate_const_180,180,O2-B-SINGLET SIGMA,0.9655172413793104,588,21,False,False,2.0,2.0,2.0,29.0,28.0
+rate_const_195,195,O-1D,0.9655172413793104,588,21,False,False,2.0,2.0,2.0,29.0,28.0
+rate_const_086,86,H2 > H2(V=2),0.9310344827586207,567,21,False,False,3.0,3.0,3.0,29.0,27.0
+rate_const_021,21,"AR4SM > AR4D,6S,RYD",0.8275862068965517,504,21,False,False,6.0,6.0,6.0,29.0,24.0
+rate_const_022,22,AR4SM > AR^,0.8275862068965517,504,21,False,False,6.0,6.0,6.0,29.0,24.0
+rate_const_029,29,"AR4SR > AR4D,6S,RYD",0.8275862068965517,504,21,False,False,6.0,6.0,6.0,29.0,24.0
+rate_const_030,30,AR4SR > AR^,0.8275862068965517,504,21,False,False,6.0,6.0,6.0,29.0,24.0
+rate_const_037,37,"AR4SPM > AR4D,6S,RYD",0.8275862068965517,504,21,False,False,6.0,6.0,6.0,29.0,24.0
+rate_const_038,38,AR4SPM > AR^,0.8275862068965517,504,21,False,False,6.0,6.0,6.0,29.0,24.0
+rate_const_045,45,"AR4SPR > AR4D,6S,RYD",0.8275862068965517,504,21,False,False,6.0,6.0,6.0,29.0,24.0
+rate_const_046,46,AR4SPR > AR^,0.8275862068965517,504,21,False,False,6.0,6.0,6.0,29.0,24.0
+rate_const_054,54,AR4P > AR^,0.8275862068965517,504,21,False,False,6.0,6.0,6.0,29.0,24.0
+rate_const_076,76,H*  > H***,0.8275862068965517,504,21,False,False,6.0,6.0,6.0,29.0,24.0
+rate_const_077,77,H*  > H^,0.8275862068965517,504,21,False,False,6.0,6.0,6.0,29.0,24.0
+rate_const_127,127,OH- -DETACH,0.8275862068965517,504,21,False,False,6.0,6.0,6.0,29.0,24.0
+rate_const_133,133,E + H2O > O- + H2 + E,0.8275862068965517,504,21,False,False,6.0,6.0,6.0,29.0,24.0
+rate_const_134,134,E + H2O > OH- + H + E,0.8275862068965517,504,21,False,False,6.0,6.0,6.0,29.0,24.0
+rate_const_152,152,E + H2OV > O- + H2 + E,0.8275862068965517,504,21,False,False,6.0,6.0,6.0,29.0,24.0
+rate_const_153,153,E + H2OV > OH- + H + E,0.8275862068965517,504,21,False,False,6.0,6.0,6.0,29.0,24.0
+rate_const_173,173,O2-ATTACHMENT TWO BODY,0.8275862068965517,504,21,False,False,6.0,6.0,6.0,29.0,24.0
+rate_const_181,181,O2-VIB 1(res),0.8275862068965517,504,21,False,False,6.0,6.0,6.0,29.0,24.0
+rate_const_182,182,O2-VIB 2(res),0.8275862068965517,504,21,False,False,6.0,6.0,6.0,29.0,24.0
+rate_const_183,183,O2-ELECTRONIC 4.5EV,0.8275862068965517,504,21,False,False,6.0,6.0,6.0,29.0,24.0
+rate_const_193,193,E + O2- > O2 + E + E,0.8275862068965517,504,21,False,False,6.0,6.0,6.0,29.0,24.0
+rate_const_196,196,O-1S,0.8275862068965517,504,21,False,False,6.0,6.0,6.0,29.0,24.0
+rate_const_204,204,O- Detachment,0.8275862068965517,504,21,False,False,6.0,6.0,6.0,29.0,24.0
+rate_const_002,2,AR3S > AR4SM,0.7931034482758621,483,21,False,False,7.0,7.0,7.0,29.0,23.0
+rate_const_003,3,AR3S > AR4SR,0.7931034482758621,483,21,False,False,7.0,7.0,7.0,29.0,23.0
+rate_const_004,4,AR3S > AR4SPM,0.7931034482758621,483,21,False,False,7.0,7.0,7.0,29.0,23.0
+rate_const_005,5,AR3S > AR4SPR,0.7931034482758621,483,21,False,False,7.0,7.0,7.0,29.0,23.0
+rate_const_006,6,AR3S > AR4P,0.7931034482758621,483,21,False,False,7.0,7.0,7.0,29.0,23.0
+rate_const_007,7,AR3S > AR3D,0.7931034482758621,483,21,False,False,7.0,7.0,7.0,29.0,23.0
+rate_const_008,8,AR3S > AR5S,0.7931034482758621,483,21,False,False,7.0,7.0,7.0,29.0,23.0
+rate_const_009,9,AR3S > AR5P,0.7931034482758621,483,21,False,False,7.0,7.0,7.0,29.0,23.0
+rate_const_010,10,AR3S > AR4D,0.7931034482758621,483,21,False,False,7.0,7.0,7.0,29.0,23.0
+rate_const_011,11,AR3S > AR6S,0.7931034482758621,483,21,False,False,7.0,7.0,7.0,29.0,23.0
+rate_const_069,69,H > H*,0.7931034482758621,483,21,False,False,7.0,7.0,7.0,29.0,23.0
+rate_const_070,70,H > H**,0.7931034482758621,483,21,False,False,7.0,7.0,7.0,29.0,23.0
+rate_const_071,71,H > H***,0.7931034482758621,483,21,False,False,7.0,7.0,7.0,29.0,23.0
+rate_const_072,72,H > H+,0.7931034482758621,483,21,False,False,7.0,7.0,7.0,29.0,23.0
+rate_const_087,87,H2 > H2(b 3 SIGMA),0.7931034482758621,483,21,False,False,7.0,7.0,7.0,29.0,23.0
+rate_const_088,88,H2 > H2(c 3 PI),0.7931034482758621,483,21,False,False,7.0,7.0,7.0,29.0,23.0
+rate_const_089,89,H2 > H + H,0.7931034482758621,483,21,False,False,7.0,7.0,7.0,29.0,23.0
+rate_const_092,92,H2 > H + H,0.7931034482758621,483,21,False,False,7.0,7.0,7.0,29.0,23.0
+rate_const_095,95,H2*  > H2^,0.7931034482758621,483,21,False,False,7.0,7.0,7.0,29.0,23.0
+rate_const_101,101,H3+ > H+ + H,0.7931034482758621,483,21,False,False,7.0,7.0,7.0,29.0,23.0
+rate_const_108,108,OH-A1PI,0.7931034482758621,483,21,False,False,7.0,7.0,7.0,29.0,23.0
+rate_const_109,109,OH-DISSOC,0.7931034482758621,483,21,False,False,7.0,7.0,7.0,29.0,23.0
+rate_const_110,110,OH-C1SIGMA,0.7931034482758621,483,21,False,False,7.0,7.0,7.0,29.0,23.0
+rate_const_111,111,OH-E1PI,0.7931034482758621,483,21,False,False,7.0,7.0,7.0,29.0,23.0
+rate_const_112,112,OH-B1SIGMA,0.7931034482758621,483,21,False,False,7.0,7.0,7.0,29.0,23.0
+rate_const_113,113,OH-I1SIGMA,0.7931034482758621,483,21,False,False,7.0,7.0,7.0,29.0,23.0
+rate_const_114,114,OH-D1DELTA,0.7931034482758621,483,21,False,False,7.0,7.0,7.0,29.0,23.0
+rate_const_115,115,OH-A3PI,0.7931034482758621,483,21,False,False,7.0,7.0,7.0,29.0,23.0
+rate_const_116,116,OH-A3SIGMA,0.7931034482758621,483,21,False,False,7.0,7.0,7.0,29.0,23.0
+rate_const_117,117,OH-D3DELTA,0.7931034482758621,483,21,False,False,7.0,7.0,7.0,29.0,23.0
+rate_const_118,118,OH-E3SIGMA,0.7931034482758621,483,21,False,False,7.0,7.0,7.0,29.0,23.0
+rate_const_119,119,OH-B3SIGMA,0.7931034482758621,483,21,False,False,7.0,7.0,7.0,29.0,23.0
+rate_const_125,125,OH-Ionization,0.7931034482758621,483,21,False,False,7.0,7.0,7.0,29.0,23.0
+rate_const_132,132,E + H2O > H- + OH + E,0.7931034482758621,483,21,False,False,7.0,7.0,7.0,29.0,23.0
+rate_const_135,135,E + H2O > OH + H + E,0.7931034482758621,483,21,False,False,7.0,7.0,7.0,29.0,23.0
+rate_const_136,136,E + H2O > O + 2H + E,0.7931034482758621,483,21,False,False,7.0,7.0,7.0,29.0,23.0
+rate_const_137,137,E + H2O > H2O^ + 2E,0.7931034482758621,483,21,False,False,7.0,7.0,7.0,29.0,23.0
+rate_const_142,142,E + H2O > H + OH(A) + E,0.7931034482758621,483,21,False,False,7.0,7.0,7.0,29.0,23.0
+rate_const_151,151,E + H2OV > H- + OH + E,0.7931034482758621,483,21,False,False,7.0,7.0,7.0,29.0,23.0
+rate_const_154,154,E + H2OV > OH + H + E,0.7931034482758621,483,21,False,False,7.0,7.0,7.0,29.0,23.0
+rate_const_155,155,E + H2OV > O + 2H + E,0.7931034482758621,483,21,False,False,7.0,7.0,7.0,29.0,23.0
+rate_const_156,156,E + H2OV > H2O^ + 2E,0.7931034482758621,483,21,False,False,7.0,7.0,7.0,29.0,23.0
+rate_const_161,161,E + H2OV > H + OH(A) + E,0.7931034482758621,483,21,False,False,7.0,7.0,7.0,29.0,23.0
+rate_const_184,184,O2-ELECTRONIC 6EV,0.7931034482758621,483,21,False,False,7.0,7.0,7.0,29.0,23.0
+rate_const_185,185,O2-ELECTRONIC 8.4EV,0.7931034482758621,483,21,False,False,7.0,7.0,7.0,29.0,23.0
+rate_const_186,186,O2-ELECTRONIC 10EV,0.7931034482758621,483,21,False,False,7.0,7.0,7.0,29.0,23.0
+rate_const_187,187,O2-IONIZATION,0.7931034482758621,483,21,False,False,7.0,7.0,7.0,29.0,23.0
+rate_const_188,188,02-130NM LINE EXCITE,0.7931034482758621,483,21,False,False,7.0,7.0,7.0,29.0,23.0
+rate_const_197,197,O-3s 5S0,0.7931034482758621,483,21,False,False,7.0,7.0,7.0,29.0,23.0
+rate_const_198,198,O-3s 3S0,0.7931034482758621,483,21,False,False,7.0,7.0,7.0,29.0,23.0
+rate_const_199,199,O-3p 5P,0.7931034482758621,483,21,False,False,7.0,7.0,7.0,29.0,23.0
+rate_const_200,200,O-3p 3P,0.7931034482758621,483,21,False,False,7.0,7.0,7.0,29.0,23.0
+rate_const_201,201,O-ION,0.7931034482758621,483,21,False,False,7.0,7.0,7.0,29.0,23.0
+rate_const_012,12,AR3S > AR-RYD,0.7586206896551724,462,21,False,False,8.0,8.0,8.0,29.0,22.0
+rate_const_013,13,AR3S > AR^,0.7586206896551724,462,21,False,False,8.0,8.0,8.0,29.0,22.0
+rate_const_090,90,H2 > H2+,0.7586206896551724,462,21,False,False,8.0,8.0,8.0,29.0,22.0
+rate_const_091,91,H2 > H*(ALPHA),0.7586206896551724,462,21,False,False,8.0,8.0,8.0,29.0,22.0
+rate_const_105,105,H3+ > H^ + H + H,0.7586206896551724,462,21,False,False,8.0,8.0,8.0,29.0,22.0
+rate_const_138,138,E + H2O > OH^ + H + E,0.7586206896551724,462,21,False,False,8.0,8.0,8.0,29.0,22.0
+rate_const_141,141,E + H2O > H^ + OH + 2E,0.7586206896551724,462,21,False,False,8.0,8.0,8.0,29.0,22.0
+rate_const_143,143,E + H2O > H(2) [121.6nm] +OH+E,0.7586206896551724,462,21,False,False,8.0,8.0,8.0,29.0,22.0
+rate_const_144,144,E + H2O > H(3) [656.3nm] +OH+E,0.7586206896551724,462,21,False,False,8.0,8.0,8.0,29.0,22.0
+rate_const_145,145,E + H2O > H(4) [486.1nm] +OH+E,0.7586206896551724,462,21,False,False,8.0,8.0,8.0,29.0,22.0
+rate_const_146,146,E + H2O >O(3p5P)[777.4nm]+H2+E,0.7586206896551724,462,21,False,False,8.0,8.0,8.0,29.0,22.0
+rate_const_157,157,E + H2OV > OH^ + H + E,0.7586206896551724,462,21,False,False,8.0,8.0,8.0,29.0,22.0
+rate_const_160,160,E + H2OV > H^ + OH + 2E,0.7586206896551724,462,21,False,False,8.0,8.0,8.0,29.0,22.0
+rate_const_162,162,E + H2OV > H(2)[121.6nm] +OH+E,0.7586206896551724,462,21,False,False,8.0,8.0,8.0,29.0,22.0
+rate_const_163,163,E + H2OV > H(3)[656.3nm] +OH+E,0.7586206896551724,462,21,False,False,8.0,8.0,8.0,29.0,22.0
+rate_const_164,164,E + H2OV > H(4)[486.1nm] +OH+E,0.7586206896551724,462,21,False,False,8.0,8.0,8.0,29.0,22.0
+rate_const_165,165,E + H2OV>O(3p5P)[777.4nm]+H2+E,0.7586206896551724,462,21,False,False,8.0,8.0,8.0,29.0,22.0
+rate_const_189,189,O + O^ + E + E,0.7586206896551724,462,21,False,False,8.0,8.0,8.0,29.0,22.0
+rate_const_158,158,E + H2OV > O^ + 2H + 2E,0.7241379310344828,441,21,False,False,9.0,9.0,9.0,29.0,21.0
+rate_const_065,65,AR+ IONIZATION,0.6896551724137931,420,21,False,False,10.0,10.0,10.0,29.0,20.0
+rate_const_139,139,E + H2O > O^ + 2H + 2E,0.6896551724137931,420,21,False,False,10.0,10.0,10.0,29.0,20.0
+rate_const_159,159,E + H2OV > H2^ + O + E,0.6896551724137931,420,21,False,False,10.0,10.0,10.0,29.0,20.0
+rate_const_140,140,E + H2O > H2^ + O + E,0.6551724137931034,399,21,False,False,11.0,11.0,11.0,29.0,19.0
+rate_const_014,14,AR3S > AR^^,0.4482758620689655,273,21,False,False,17.0,17.0,17.0,29.0,13.0
+rate_const_120,120,OH^-X2SIGMA--Not Used,0.0,0,0,True,False,,,,,0.0
+rate_const_121,121,OH^-A2PI--Not Used,0.0,0,0,True,False,,,,,0.0
+rate_const_122,122,OH^-B2SIGMA--Not Used,0.0,0,0,True,False,,,,,0.0
+rate_const_123,123,"OH-DISSOC, C^+O--Not Used",0.0,0,0,True,False,,,,,0.0
+rate_const_124,124,"OH-DISSOC,C+O^--Not used",0.0,0,0,True,False,,,,,0.0
