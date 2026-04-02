@@ -1,0 +1,205 @@
+reaction_id,reaction_label,rate_const_column,super_rate_column,frac_power_column
+1,AR3S-ELASTIC,rate_const_001,super_rate_001,frac_power_001
+2,AR3S > AR4SM,rate_const_002,super_rate_002,frac_power_002
+3,AR3S > AR4SR,rate_const_003,super_rate_003,frac_power_003
+4,AR3S > AR4SPM,rate_const_004,super_rate_004,frac_power_004
+5,AR3S > AR4SPR,rate_const_005,super_rate_005,frac_power_005
+6,AR3S > AR4P,rate_const_006,super_rate_006,frac_power_006
+7,AR3S > AR3D,rate_const_007,super_rate_007,frac_power_007
+8,AR3S > AR5S,rate_const_008,super_rate_008,frac_power_008
+9,AR3S > AR5P,rate_const_009,super_rate_009,frac_power_009
+10,AR3S > AR4D,rate_const_010,super_rate_010,frac_power_010
+11,AR3S > AR6S,rate_const_011,super_rate_011,frac_power_011
+12,AR3S > AR-RYD,rate_const_012,super_rate_012,frac_power_012
+13,AR3S > AR^,rate_const_013,super_rate_013,frac_power_013
+14,AR3S > AR^^,rate_const_014,super_rate_014,frac_power_014
+15,AR4SM-ELASTIC,rate_const_015,super_rate_015,frac_power_015
+16,AR4SM > AR3S,rate_const_016,super_rate_016,frac_power_016
+17,AR4SM > AR4SR,rate_const_017,super_rate_017,frac_power_017
+18,AR4SM > AR4SPM,rate_const_018,super_rate_018,frac_power_018
+19,AR4SM > AR4SPR,rate_const_019,super_rate_019,frac_power_019
+20,"AR4SM>AR4P,3D,5S,5P",rate_const_020,super_rate_020,frac_power_020
+21,"AR4SM > AR4D,6S,RYD",rate_const_021,super_rate_021,frac_power_021
+22,AR4SM > AR^,rate_const_022,super_rate_022,frac_power_022
+23,AR4SR-ELASTIC,rate_const_023,super_rate_023,frac_power_023
+24,AR4SR > AR3S,rate_const_024,super_rate_024,frac_power_024
+25,AR4SR > AR4SM,rate_const_025,super_rate_025,frac_power_025
+26,AR4SR > AR4SPM,rate_const_026,super_rate_026,frac_power_026
+27,AR4SR > AR4SPR,rate_const_027,super_rate_027,frac_power_027
+28,"AR4SR>AR4P,3D,5S,5P",rate_const_028,super_rate_028,frac_power_028
+29,"AR4SR > AR4D,6S,RYD",rate_const_029,super_rate_029,frac_power_029
+30,AR4SR > AR^,rate_const_030,super_rate_030,frac_power_030
+31,AR4SPM-ELASTIC,rate_const_031,super_rate_031,frac_power_031
+32,AR4SPM > AR3S,rate_const_032,super_rate_032,frac_power_032
+33,AR4SPM > AR4SM,rate_const_033,super_rate_033,frac_power_033
+34,AR4SPM > AR4SR,rate_const_034,super_rate_034,frac_power_034
+35,AR4SPM > AR4SPR,rate_const_035,super_rate_035,frac_power_035
+36,"AR4SPM>AR4P,3D,5S,5P",rate_const_036,super_rate_036,frac_power_036
+37,"AR4SPM > AR4D,6S,RYD",rate_const_037,super_rate_037,frac_power_037
+38,AR4SPM > AR^,rate_const_038,super_rate_038,frac_power_038
+39,AR4SPR-ELASTIC,rate_const_039,super_rate_039,frac_power_039
+40,AR4SPR > AR3S,rate_const_040,super_rate_040,frac_power_040
+41,AR4SPR > AR4SM,rate_const_041,super_rate_041,frac_power_041
+42,AR4SPR > AR4SR,rate_const_042,super_rate_042,frac_power_042
+43,AR4SPR > AR4SPM,rate_const_043,super_rate_043,frac_power_043
+44,"AR4SPR>AR4P,3D,5S,5P",rate_const_044,super_rate_044,frac_power_044
+45,"AR4SPR > AR4D,6S,RYD",rate_const_045,super_rate_045,frac_power_045
+46,AR4SPR > AR^,rate_const_046,super_rate_046,frac_power_046
+47,AR4P-ELASTIC,rate_const_047,super_rate_047,frac_power_047
+48,AR4P > AR3S,rate_const_048,super_rate_048,frac_power_048
+49,AR4P > AR4SM,rate_const_049,super_rate_049,frac_power_049
+50,AR4P > AR4SR,rate_const_050,super_rate_050,frac_power_050
+51,AR4P > AR4SPM,rate_const_051,super_rate_051,frac_power_051
+52,AR4P > AR4SPR,rate_const_052,super_rate_052,frac_power_052
+53,"AR4P > AR4D,6S,RYD",rate_const_053,super_rate_053,frac_power_053
+54,AR4P > AR^,rate_const_054,super_rate_054,frac_power_054
+55,AR4D-ELASTIC,rate_const_055,super_rate_055,frac_power_055
+56,AR4D > AR3S,rate_const_056,super_rate_056,frac_power_056
+57,AR4D > AR4SM,rate_const_057,super_rate_057,frac_power_057
+58,AR4D > AR4SR,rate_const_058,super_rate_058,frac_power_058
+59,AR4D > AR4SPM,rate_const_059,super_rate_059,frac_power_059
+60,AR4D > AR4SPR,rate_const_060,super_rate_060,frac_power_060
+61,"AR4D > AR4P,3D,5S,5P",rate_const_061,super_rate_061,frac_power_061
+62,AR4D > AR^,rate_const_062,super_rate_062,frac_power_062
+63,AR+ -ELASTIC,rate_const_063,super_rate_063,frac_power_063
+64,AR+ -RECOMBINATION,rate_const_064,super_rate_064,frac_power_064
+65,AR+ IONIZATION,rate_const_065,super_rate_065,frac_power_065
+66,AR2+ -MOMTIC,rate_const_066,super_rate_066,frac_power_066
+67,AR2+ -RECOMBINATION,rate_const_067,super_rate_067,frac_power_067
+68,H -ELASTIC,rate_const_068,super_rate_068,frac_power_068
+69,H > H*,rate_const_069,super_rate_069,frac_power_069
+70,H > H**,rate_const_070,super_rate_070,frac_power_070
+71,H > H***,rate_const_071,super_rate_071,frac_power_071
+72,H > H+,rate_const_072,super_rate_072,frac_power_072
+73,H* -ELASTIC,rate_const_073,super_rate_073,frac_power_073
+74,H*  > H,rate_const_074,super_rate_074,frac_power_074
+75,H*  > H**,rate_const_075,super_rate_075,frac_power_075
+76,H*  > H***,rate_const_076,super_rate_076,frac_power_076
+77,H*  > H^,rate_const_077,super_rate_077,frac_power_077
+78,H+ -ELASTIC,rate_const_078,super_rate_078,frac_power_078
+79,H+ -RECOMBINATION,rate_const_079,super_rate_079,frac_power_079
+80,H- -ELASTIC,rate_const_080,super_rate_080,frac_power_080
+81,H- -DETACHMENT,rate_const_081,super_rate_081,frac_power_081
+82,H2-ELASTIC,rate_const_082,super_rate_082,frac_power_082
+83,H2-ROTATIONAL (0-2),rate_const_083,super_rate_083,frac_power_083
+84,H2-ROTATIONAL (1-3),rate_const_084,super_rate_084,frac_power_084
+85,H2 > H2(V=1),rate_const_085,super_rate_085,frac_power_085
+86,H2 > H2(V=2),rate_const_086,super_rate_086,frac_power_086
+87,H2 > H2(b 3 SIGMA),rate_const_087,super_rate_087,frac_power_087
+88,H2 > H2(c 3 PI),rate_const_088,super_rate_088,frac_power_088
+89,H2 > H + H,rate_const_089,super_rate_089,frac_power_089
+90,H2 > H2+,rate_const_090,super_rate_090,frac_power_090
+91,H2 > H*(ALPHA),rate_const_091,super_rate_091,frac_power_091
+92,H2 > H + H,rate_const_092,super_rate_092,frac_power_092
+93,H2* -ELASTIC,rate_const_093,super_rate_093,frac_power_093
+94,H2*  > H2,rate_const_094,super_rate_094,frac_power_094
+95,H2*  > H2^,rate_const_095,super_rate_095,frac_power_095
+96,H2+ -ELASTIC,rate_const_096,super_rate_096,frac_power_096
+97,H2+ > H+ + H,rate_const_097,super_rate_097,frac_power_097
+98,H2+ > H + H,rate_const_098,super_rate_098,frac_power_098
+99,H2+ > H+ + H-,rate_const_099,super_rate_099,frac_power_099
+100,H3+ -ELASTIC,rate_const_100,super_rate_100,frac_power_100
+101,H3+ > H+ + H,rate_const_101,super_rate_101,frac_power_101
+102,H3+ > H + H2,rate_const_102,super_rate_102,frac_power_102
+103,H3+ > H2 + H,rate_const_103,super_rate_103,frac_power_103
+104,H3+ > H + H + H,rate_const_104,super_rate_104,frac_power_104
+105,H3+ > H^ + H + H,rate_const_105,super_rate_105,frac_power_105
+106,OH-MOM TRANS,rate_const_106,super_rate_106,frac_power_106
+107,OH-V1,rate_const_107,super_rate_107,frac_power_107
+108,OH-A1PI,rate_const_108,super_rate_108,frac_power_108
+109,OH-DISSOC,rate_const_109,super_rate_109,frac_power_109
+110,OH-C1SIGMA,rate_const_110,super_rate_110,frac_power_110
+111,OH-E1PI,rate_const_111,super_rate_111,frac_power_111
+112,OH-B1SIGMA,rate_const_112,super_rate_112,frac_power_112
+113,OH-I1SIGMA,rate_const_113,super_rate_113,frac_power_113
+114,OH-D1DELTA,rate_const_114,super_rate_114,frac_power_114
+115,OH-A3PI,rate_const_115,super_rate_115,frac_power_115
+116,OH-A3SIGMA,rate_const_116,super_rate_116,frac_power_116
+117,OH-D3DELTA,rate_const_117,super_rate_117,frac_power_117
+118,OH-E3SIGMA,rate_const_118,super_rate_118,frac_power_118
+119,OH-B3SIGMA,rate_const_119,super_rate_119,frac_power_119
+120,OH^-X2SIGMA--Not Used,rate_const_120,super_rate_120,frac_power_120
+121,OH^-A2PI--Not Used,rate_const_121,super_rate_121,frac_power_121
+122,OH^-B2SIGMA--Not Used,rate_const_122,super_rate_122,frac_power_122
+123,"OH-DISSOC, C^+O--Not Used",rate_const_123,super_rate_123,frac_power_123
+124,"OH-DISSOC,C+O^--Not used",rate_const_124,super_rate_124,frac_power_124
+125,OH-Ionization,rate_const_125,super_rate_125,frac_power_125
+126,OH- -MOM,rate_const_126,super_rate_126,frac_power_126
+127,OH- -DETACH,rate_const_127,super_rate_127,frac_power_127
+128,E + H2O-MOMENTUM TRANSFER,rate_const_128,super_rate_128,frac_power_128
+129,E + H2O > H2OV(100) + E,rate_const_129,super_rate_129,frac_power_129
+130,E + H2O > H2OV(010) + E,rate_const_130,super_rate_130,frac_power_130
+131,E + H2O > H2OV(001) + E,rate_const_131,super_rate_131,frac_power_131
+132,E + H2O > H- + OH + E,rate_const_132,super_rate_132,frac_power_132
+133,E + H2O > O- + H2 + E,rate_const_133,super_rate_133,frac_power_133
+134,E + H2O > OH- + H + E,rate_const_134,super_rate_134,frac_power_134
+135,E + H2O > OH + H + E,rate_const_135,super_rate_135,frac_power_135
+136,E + H2O > O + 2H + E,rate_const_136,super_rate_136,frac_power_136
+137,E + H2O > H2O^ + 2E,rate_const_137,super_rate_137,frac_power_137
+138,E + H2O > OH^ + H + E,rate_const_138,super_rate_138,frac_power_138
+139,E + H2O > O^ + 2H + 2E,rate_const_139,super_rate_139,frac_power_139
+140,E + H2O > H2^ + O + E,rate_const_140,super_rate_140,frac_power_140
+141,E + H2O > H^ + OH + 2E,rate_const_141,super_rate_141,frac_power_141
+142,E + H2O > H + OH(A) + E,rate_const_142,super_rate_142,frac_power_142
+143,E + H2O > H(2) [121.6nm] +OH+E,rate_const_143,super_rate_143,frac_power_143
+144,E + H2O > H(3) [656.3nm] +OH+E,rate_const_144,super_rate_144,frac_power_144
+145,E + H2O > H(4) [486.1nm] +OH+E,rate_const_145,super_rate_145,frac_power_145
+146,E + H2O >O(3p5P)[777.4nm]+H2+E,rate_const_146,super_rate_146,frac_power_146
+147,E + H2OV-MOMENTUM TRANSFER,rate_const_147,super_rate_147,frac_power_147
+148,E + H2OV(100) > H2O+E x 1e-10,rate_const_148,super_rate_148,frac_power_148
+149,E + H2OV(010) > H2O+E x 1e-10,rate_const_149,super_rate_149,frac_power_149
+150,E + H2OV(001) > H2O+E x 1e-10,rate_const_150,super_rate_150,frac_power_150
+151,E + H2OV > H- + OH + E,rate_const_151,super_rate_151,frac_power_151
+152,E + H2OV > O- + H2 + E,rate_const_152,super_rate_152,frac_power_152
+153,E + H2OV > OH- + H + E,rate_const_153,super_rate_153,frac_power_153
+154,E + H2OV > OH + H + E,rate_const_154,super_rate_154,frac_power_154
+155,E + H2OV > O + 2H + E,rate_const_155,super_rate_155,frac_power_155
+156,E + H2OV > H2O^ + 2E,rate_const_156,super_rate_156,frac_power_156
+157,E + H2OV > OH^ + H + E,rate_const_157,super_rate_157,frac_power_157
+158,E + H2OV > O^ + 2H + 2E,rate_const_158,super_rate_158,frac_power_158
+159,E + H2OV > H2^ + O + E,rate_const_159,super_rate_159,frac_power_159
+160,E + H2OV > H^ + OH + 2E,rate_const_160,super_rate_160,frac_power_160
+161,E + H2OV > H + OH(A) + E,rate_const_161,super_rate_161,frac_power_161
+162,E + H2OV > H(2)[121.6nm] +OH+E,rate_const_162,super_rate_162,frac_power_162
+163,E + H2OV > H(3)[656.3nm] +OH+E,rate_const_163,super_rate_163,frac_power_163
+164,E + H2OV > H(4)[486.1nm] +OH+E,rate_const_164,super_rate_164,frac_power_164
+165,E + H2OV>O(3p5P)[777.4nm]+H2+E,rate_const_165,super_rate_165,frac_power_165
+166,E + H2OV > H2O+E (average),rate_const_166,super_rate_166,frac_power_166
+167,H2O+ -MOMTIC,rate_const_167,super_rate_167,frac_power_167
+168,H2O+ -RECOMBINATION,rate_const_168,super_rate_168,frac_power_168
+169,H2O2-MOM,rate_const_169,super_rate_169,frac_power_169
+170,H2O2 > H2O + O-,rate_const_170,super_rate_170,frac_power_170
+171,H2O2 > OH + OH-,rate_const_171,super_rate_171,frac_power_171
+172,O2-MOMENTUM,rate_const_172,super_rate_172,frac_power_172
+173,O2-ATTACHMENT TWO BODY,rate_const_173,super_rate_173,frac_power_173
+174,O2-ROTATIONAL,rate_const_174,super_rate_174,frac_power_174
+175,O2-VIB 1,rate_const_175,super_rate_175,frac_power_175
+176,O2-VIB 2,rate_const_176,super_rate_176,frac_power_176
+177,O2-VIB 3,rate_const_177,super_rate_177,frac_power_177
+178,O2-VIB 4,rate_const_178,super_rate_178,frac_power_178
+179,O2-SINGLET DELTA,rate_const_179,super_rate_179,frac_power_179
+180,O2-B-SINGLET SIGMA,rate_const_180,super_rate_180,frac_power_180
+181,O2-VIB 1(res),rate_const_181,super_rate_181,frac_power_181
+182,O2-VIB 2(res),rate_const_182,super_rate_182,frac_power_182
+183,O2-ELECTRONIC 4.5EV,rate_const_183,super_rate_183,frac_power_183
+184,O2-ELECTRONIC 6EV,rate_const_184,super_rate_184,frac_power_184
+185,O2-ELECTRONIC 8.4EV,rate_const_185,super_rate_185,frac_power_185
+186,O2-ELECTRONIC 10EV,rate_const_186,super_rate_186,frac_power_186
+187,O2-IONIZATION,rate_const_187,super_rate_187,frac_power_187
+188,02-130NM LINE EXCITE,rate_const_188,super_rate_188,frac_power_188
+189,O + O^ + E + E,rate_const_189,super_rate_189,frac_power_189
+190,O2+ -ELASTIC,rate_const_190,super_rate_190,frac_power_190
+191,O2+ -RECOMBINATION,rate_const_191,super_rate_191,frac_power_191
+192,O2- -MOMENTUM TRANSFER,rate_const_192,super_rate_192,frac_power_192
+193,E + O2- > O2 + E + E,rate_const_193,super_rate_193,frac_power_193
+194,O-MOMENTUM,rate_const_194,super_rate_194,frac_power_194
+195,O-1D,rate_const_195,super_rate_195,frac_power_195
+196,O-1S,rate_const_196,super_rate_196,frac_power_196
+197,O-3s 5S0,rate_const_197,super_rate_197,frac_power_197
+198,O-3s 3S0,rate_const_198,super_rate_198,frac_power_198
+199,O-3p 5P,rate_const_199,super_rate_199,frac_power_199
+200,O-3p 3P,rate_const_200,super_rate_200,frac_power_200
+201,O-ION,rate_const_201,super_rate_201,frac_power_201
+202,O+ -ELASTIC,rate_const_202,super_rate_202,frac_power_202
+203,O- ELASTIC,rate_const_203,super_rate_203,frac_power_203
+204,O- Detachment,rate_const_204,super_rate_204,frac_power_204

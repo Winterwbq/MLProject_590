@@ -1,0 +1,14 @@
+metric,value
+source_path,/Users/bingqingwang/Desktop/UMich/590_Machine learning/project/global_kin_boltz.out
+total_cases,609
+density_group_count,21
+expected_density_group_count,21
+local_case_count_expected,29
+local_case_count_observed,29
+unique_e_over_n_values,29
+case_block_lines,344
+input_species_count,49
+rate_count,204
+power_species_count,49
+min_cases_per_density_group,29
+max_cases_per_density_group,29

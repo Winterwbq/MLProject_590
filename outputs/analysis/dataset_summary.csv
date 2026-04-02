@@ -1,0 +1,17 @@
+metric,value
+total_cases,609
+density_group_count,21
+expected_density_group_count,21
+local_case_count_observed,29
+expected_local_case_count,29
+unique_e_over_n_values,29
+input_species_count,49
+rate_count,204
+input_value_entries,29841
+rate_constant_entries,124236
+min_e_over_n_v_cm2,1e-20
+max_e_over_n_v_cm2,1e-14
+min_input_sum,0.9999485583269849
+max_input_sum,1.0000513189365585
+zero_input_value_count,9425
+zero_rate_const_count,16359
