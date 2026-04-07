@@ -27,12 +27,12 @@ from .evaluation import (
 )
 from .models import ModelConfig, build_model
 from .preprocessing import (
-    ID_COLUMNS,
     TARGET_PREFIX,
     TargetTransformer,
     build_feature_transformer,
     build_split_assignment_frame,
     create_random_case_splits,
+    get_case_metadata_columns,
 )
 
 
@@ -194,6 +194,7 @@ def run_ffn_baseline_experiments(
     targets = dataset.training_targets.copy()
     reaction_map = dataset.reaction_map.copy()
     target_columns = [column for column in targets.columns if column.startswith(TARGET_PREFIX)]
+    metadata_columns = get_case_metadata_columns(inputs)
 
     verification_frame = pd.DataFrame(validate_parsed_shapes(dataset))
     save_csv(verification_frame, results_dir / "verification_checks.csv")
@@ -245,7 +246,7 @@ def run_ffn_baseline_experiments(
         save_csv(
             pd.concat(
                 [
-                    inputs[ID_COLUMNS].reset_index(drop=True),
+                    inputs[metadata_columns].reset_index(drop=True),
                     split_assignment[["locked_split"]].reset_index(drop=True),
                     feature_transformer.transform(inputs).reset_index(drop=True),
                 ],
@@ -364,10 +365,10 @@ def run_ffn_baseline_experiments(
             y_pred_log=y_test_log_pred,
             y_true_original=y_test_original,
             y_pred_original=y_test_original_pred,
-            case_ids=targets.loc[splits.test_indices, ID_COLUMNS],
+            case_ids=targets.loc[splits.test_indices, metadata_columns],
         )
         prediction_frame = build_prediction_frame(
-            case_ids=targets.loc[splits.test_indices, ID_COLUMNS],
+            case_ids=targets.loc[splits.test_indices, metadata_columns],
             reaction_map=reaction_map,
             y_true_original=y_test_original,
             y_pred_original=y_test_original_pred,

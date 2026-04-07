@@ -36,12 +36,13 @@ from .evaluation import (
 )
 from .models import ModelConfig, build_model, build_model_configs
 from .preprocessing import (
-    ID_COLUMNS,
     TARGET_PREFIX,
     TargetTransformer,
     build_feature_transformer,
     build_split_assignment_frame,
+    create_group_holdout_splits,
     create_random_case_splits,
+    get_case_metadata_columns,
 )
 from .reporting import export_experiment_report
 
@@ -199,14 +200,22 @@ def _save_feature_snapshots(
     data_snapshot_dir: Path,
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
     trainval_inputs = inputs.loc[trainval_indices]
+    metadata_columns = get_case_metadata_columns(inputs)
     feature_metadata_rows = []
 
-    for feature_set in ("full_nonconstant_plus_log_en", "composition_pca_plus_log_en"):
+    for feature_set in (
+        "full_nonconstant_plus_log_en",
+        "composition_pca_plus_log_en",
+        "full_nonconstant_plus_log_en_log_power",
+        "composition_pca_plus_log_en_log_power",
+    ):
+        if feature_set.endswith("_log_power") and "power_mj" not in inputs.columns:
+            continue
         transformer = build_feature_transformer(feature_set).fit(trainval_inputs)
         transformed = transformer.transform(inputs)
         snapshot = pd.concat(
             [
-                inputs[ID_COLUMNS].reset_index(drop=True),
+                inputs[metadata_columns].reset_index(drop=True),
                 split_assignment[["locked_split"]].reset_index(drop=True),
                 transformed.reset_index(drop=True),
             ],
@@ -220,7 +229,7 @@ def _save_feature_snapshots(
     target_transformer = TargetTransformer(target_columns).fit(targets.loc[trainval_indices])
     transformed_targets = pd.concat(
         [
-            targets[ID_COLUMNS].reset_index(drop=True),
+            targets[metadata_columns].reset_index(drop=True),
             split_assignment[["locked_split"]].reset_index(drop=True),
             target_transformer.transform(targets).reset_index(drop=True),
         ],
@@ -305,6 +314,10 @@ def run_training_experiment(
     results_dir: Path,
     report_output_path: Path | None = None,
     max_configs: int | None = None,
+    feature_sets: list[str] | None = None,
+    split_strategy: str = "random_case",
+    holdout_power_labels: list[str] | None = None,
+    configs: list[ModelConfig] | None = None,
 ) -> dict[str, Path]:
     results_dir.mkdir(parents=True, exist_ok=True)
     output_dirs = {name: results_dir / subdir for name, subdir in RESULT_SUBDIRS.items()}
@@ -330,8 +343,18 @@ def run_training_experiment(
     targets = dataset.training_targets.copy()
     reaction_map = dataset.reaction_map.copy()
     target_columns = [column for column in targets.columns if column.startswith(TARGET_PREFIX)]
+    metadata_columns = get_case_metadata_columns(inputs)
 
-    splits = create_random_case_splits(total_cases=len(inputs))
+    if split_strategy == "random_case":
+        splits = create_random_case_splits(total_cases=len(inputs))
+    elif split_strategy == "power_holdout":
+        if "power_label" not in inputs.columns:
+            raise ValueError("power_holdout split requires power_label in training_inputs.")
+        if not holdout_power_labels:
+            raise ValueError("holdout_power_labels must be provided for power_holdout.")
+        splits = create_group_holdout_splits(inputs["power_label"], holdout_power_labels)
+    else:
+        raise ValueError(f"Unsupported split_strategy: {split_strategy}")
     split_assignment = build_split_assignment_frame(inputs, splits)
     save_csv(split_assignment, output_dirs["data_snapshots"] / "split_assignments.csv")
     manifest_rows.append(
@@ -345,9 +368,11 @@ def run_training_experiment(
     split_metadata_rows = [
         {
             "split_name": "locked_test",
+            "split_strategy": split_strategy,
             "seed": 42,
             "trainval_case_count": len(splits.trainval_indices),
             "test_case_count": len(splits.test_indices),
+            "holdout_power_labels": "|".join(holdout_power_labels or []),
         }
     ]
     for fold in splits.validation_folds:
@@ -387,10 +412,17 @@ def run_training_experiment(
         }
     )
 
-    feature_sets = ["full_nonconstant_plus_log_en", "composition_pca_plus_log_en"]
-    configs = build_model_configs(feature_sets)
-    if max_configs is not None:
-        configs = configs[:max_configs]
+    if configs is None:
+        if feature_sets is None:
+            feature_sets = ["full_nonconstant_plus_log_en", "composition_pca_plus_log_en"]
+        configs = build_model_configs(feature_sets)
+        if max_configs is not None:
+            configs = configs[:max_configs]
+    else:
+        if max_configs is not None:
+            configs = configs[:max_configs]
+        if feature_sets is None:
+            feature_sets = sorted({config.feature_set for config in configs})
     save_csv(_build_config_frame(configs), output_dirs["tuning"] / "model_config_catalog.csv")
 
     trial_rows = []
@@ -419,7 +451,7 @@ def run_training_experiment(
             y_train_log=y_train_log,
             y_eval_log=y_val_log,
             y_eval_original=y_val_original,
-            case_ids=val_targets[ID_COLUMNS],
+            case_ids=val_targets[metadata_columns],
             reaction_map=reaction_map,
             target_transformer=target_transformer,
             prefix=f"fold_{fold.fold_id}_validation",
@@ -562,7 +594,7 @@ def run_training_experiment(
         y_train_log=y_trainval_log,
         y_eval_log=y_test_log,
         y_eval_original=y_test_original,
-        case_ids=test_targets[ID_COLUMNS],
+        case_ids=test_targets[metadata_columns],
         reaction_map=reaction_map,
         target_transformer=final_target_transformer,
         prefix="locked_test",
@@ -601,10 +633,10 @@ def run_training_experiment(
         y_pred_log=y_test_log_pred,
         y_true_original=y_test_original,
         y_pred_original=y_test_original_pred,
-        case_ids=test_targets[ID_COLUMNS],
+        case_ids=test_targets[metadata_columns],
     )
     prediction_frame = build_prediction_frame(
-        case_ids=test_targets[ID_COLUMNS],
+        case_ids=test_targets[metadata_columns],
         reaction_map=reaction_map,
         y_true_original=y_test_original,
         y_pred_original=y_test_original_pred,

@@ -116,11 +116,9 @@ def compute_per_case_metrics(
         factor2, positive_count = _factor_accuracy(true_original, pred_original, 2.0)
         factor5, _ = _factor_accuracy(true_original, pred_original, 5.0)
         factor10, _ = _factor_accuracy(true_original, pred_original, 10.0)
-        rows.append(
+        row = dict(case_row.to_dict())
+        row.update(
             {
-                "global_case_id": case_row["global_case_id"],
-                "density_group_id": case_row["density_group_id"],
-                "local_case_id": case_row["local_case_id"],
                 "log_rmse": float(math.sqrt(mean_squared_error(true_log, pred_log))),
                 "log_mae": float(mean_absolute_error(true_log, pred_log)),
                 "original_rmse": float(math.sqrt(mean_squared_error(true_original, pred_original))),
@@ -131,6 +129,7 @@ def compute_per_case_metrics(
                 "positive_factor_denominator": positive_count,
             }
         )
+        rows.append(row)
     return pd.DataFrame(rows)
 
 
@@ -170,11 +169,9 @@ def build_prediction_frame(
     rows = []
     for case_position, (_, case_row) in enumerate(case_ids.iterrows()):
         for reaction_index, reaction in reaction_map.iterrows():
-            rows.append(
+            row = dict(case_row.to_dict())
+            row.update(
                 {
-                    "global_case_id": case_row["global_case_id"],
-                    "density_group_id": case_row["density_group_id"],
-                    "local_case_id": case_row["local_case_id"],
                     "reaction_id": reaction["reaction_id"],
                     "reaction_label": reaction["reaction_label"],
                     "target_column": reaction["rate_const_column"],
@@ -192,6 +189,7 @@ def build_prediction_frame(
                     ),
                 }
             )
+            rows.append(row)
     return pd.DataFrame(rows)
 
 
