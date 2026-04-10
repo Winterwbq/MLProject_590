@@ -28,7 +28,7 @@ The file `outputs/advanced_analysis/advanced_output_manifest.csv` documents the 
 
 Primary source index:
 
-- [advanced_output_manifest.csv](../outputs/advanced_analysis/advanced_output_manifest.csv)
+- [advanced_output_manifest.csv](../../outputs/advanced_analysis/advanced_output_manifest.csv)
 
 ## Executive Summary
 
@@ -53,10 +53,10 @@ These results suggest that the dataset is not an arbitrary 609-row tabular regre
 
 Main supporting outputs:
 
-- [low_rank_summary.csv](../outputs/advanced_analysis/low_rank_summary.csv)
-- [reaction_variance_decomposition.csv](../outputs/advanced_analysis/reaction_variance_decomposition.csv)
-- [case_cluster_assignments.csv](../outputs/advanced_analysis/case_cluster_assignments.csv)
-- [case_clustering_target_pca.png](../outputs/advanced_figures/case_clustering_target_pca.png)
+- [low_rank_summary.csv](../../outputs/advanced_analysis/low_rank_summary.csv)
+- [reaction_variance_decomposition.csv](../../outputs/advanced_analysis/reaction_variance_decomposition.csv)
+- [case_cluster_assignments.csv](../../outputs/advanced_analysis/case_cluster_assignments.csv)
+- [case_clustering_target_pca.png](../../outputs/advanced_figures/case_clustering_target_pca.png)
 
 ## 1. Correlation and Redundancy Analysis
 
@@ -81,9 +81,9 @@ This means many input species move together across the 21 density groups rather 
 
 Supporting outputs:
 
-- [input_feature_metadata.csv](../outputs/advanced_analysis/input_feature_metadata.csv)
-- [input_correlation_top_pairs.csv](../outputs/advanced_analysis/input_correlation_top_pairs.csv)
-- [input_correlation_heatmap_top_features.png](../outputs/advanced_figures/input_correlation_heatmap_top_features.png)
+- [input_feature_metadata.csv](../../outputs/advanced_analysis/input_feature_metadata.csv)
+- [input_correlation_top_pairs.csv](../../outputs/advanced_analysis/input_correlation_top_pairs.csv)
+- [input_correlation_heatmap_top_features.png](../../outputs/advanced_figures/input_correlation_heatmap_top_features.png)
 
 ### Targets
 
@@ -102,8 +102,8 @@ The target correlations indicate that many outputs are not evolving independentl
 
 Supporting outputs:
 
-- [reaction_correlation_top_pairs.csv](../outputs/advanced_analysis/reaction_correlation_top_pairs.csv)
-- [target_correlation_heatmap_top_reactions.png](../outputs/advanced_figures/target_correlation_heatmap_top_reactions.png)
+- [reaction_correlation_top_pairs.csv](../../outputs/advanced_analysis/reaction_correlation_top_pairs.csv)
+- [target_correlation_heatmap_top_reactions.png](../../outputs/advanced_figures/target_correlation_heatmap_top_reactions.png)
 
 ### Input-to-Target Correlations
 
@@ -125,8 +125,8 @@ This is a decisive result. It says:
 
 Supporting outputs:
 
-- [feature_target_spearman_top_pairs.csv](../outputs/advanced_analysis/feature_target_spearman_top_pairs.csv)
-- [feature_sensitivity_summary.csv](../outputs/advanced_analysis/feature_sensitivity_summary.csv)
+- [feature_target_spearman_top_pairs.csv](../../outputs/advanced_analysis/feature_target_spearman_top_pairs.csv)
+- [feature_sensitivity_summary.csv](../../outputs/advanced_analysis/feature_sensitivity_summary.csv)
 
 ## 2. Group-Aware Variation Decomposition
 
@@ -152,7 +152,7 @@ Even for the more composition-sensitive summaries, `E/N` remains the largest sou
 
 Supporting outputs:
 
-- [case_feature_variance_decomposition.csv](../outputs/advanced_analysis/case_feature_variance_decomposition.csv)
+- [case_feature_variance_decomposition.csv](../../outputs/advanced_analysis/case_feature_variance_decomposition.csv)
 
 ### Reaction Targets
 
@@ -183,8 +183,8 @@ Even these are still mostly local-case-driven. Their composition share is just r
 
 Supporting outputs:
 
-- [reaction_variance_decomposition.csv](../outputs/advanced_analysis/reaction_variance_decomposition.csv)
-- [reaction_variance_decomposition_top_local_case.png](../outputs/advanced_figures/reaction_variance_decomposition_top_local_case.png)
+- [reaction_variance_decomposition.csv](../../outputs/advanced_analysis/reaction_variance_decomposition.csv)
+- [reaction_variance_decomposition_top_local_case.png](../../outputs/advanced_figures/reaction_variance_decomposition_top_local_case.png)
 
 ## 3. Target Transform Diagnostics
 
@@ -212,9 +212,9 @@ So no transform fully removes the regime structure, but transformed targets are 
 
 Supporting outputs:
 
-- [target_transform_global_summary.csv](../outputs/advanced_analysis/target_transform_global_summary.csv)
-- [target_transform_reaction_summary.csv](../outputs/advanced_analysis/target_transform_reaction_summary.csv)
-- [target_transform_skewness_comparison.png](../outputs/advanced_figures/target_transform_skewness_comparison.png)
+- [target_transform_global_summary.csv](../../outputs/advanced_analysis/target_transform_global_summary.csv)
+- [target_transform_reaction_summary.csv](../../outputs/advanced_analysis/target_transform_reaction_summary.csv)
+- [target_transform_skewness_comparison.png](../../outputs/advanced_figures/target_transform_skewness_comparison.png)
 
 ## 4. Reaction Activity Analysis
 
@@ -256,10 +256,10 @@ This is one of the clearest findings in the whole analysis. It means the dataset
 
 Supporting outputs:
 
-- [reaction_activity_summary.csv](../outputs/advanced_analysis/reaction_activity_summary.csv)
-- [reaction_activation_by_local_case.csv](../outputs/advanced_analysis/reaction_activation_by_local_case.csv)
-- [reaction_activity_summary.png](../outputs/advanced_figures/reaction_activity_summary.png)
-- [reaction_activation_by_local_case.png](../outputs/advanced_figures/reaction_activation_by_local_case.png)
+- [reaction_activity_summary.csv](../../outputs/advanced_analysis/reaction_activity_summary.csv)
+- [reaction_activation_by_local_case.csv](../../outputs/advanced_analysis/reaction_activation_by_local_case.csv)
+- [reaction_activity_summary.png](../../outputs/advanced_figures/reaction_activity_summary.png)
+- [reaction_activation_by_local_case.png](../../outputs/advanced_figures/reaction_activation_by_local_case.png)
 
 ## 5. Monotonicity and Trend Analysis Over `E/N`
 
@@ -284,7 +284,7 @@ Other variables remain strongly monotonic, though less perfectly:
 
 Supporting outputs:
 
-- [case_feature_monotonicity.csv](../outputs/advanced_analysis/case_feature_monotonicity.csv)
+- [case_feature_monotonicity.csv](../../outputs/advanced_analysis/case_feature_monotonicity.csv)
 
 ### Reaction Targets
 
@@ -318,8 +318,8 @@ This means a large fraction of the target space follows smooth one-directional t
 
 Supporting outputs:
 
-- [reaction_monotonicity_summary.csv](../outputs/advanced_analysis/reaction_monotonicity_summary.csv)
-- [reaction_monotonicity_histogram.png](../outputs/advanced_figures/reaction_monotonicity_histogram.png)
+- [reaction_monotonicity_summary.csv](../../outputs/advanced_analysis/reaction_monotonicity_summary.csv)
+- [reaction_monotonicity_histogram.png](../../outputs/advanced_figures/reaction_monotonicity_histogram.png)
 
 ## 6. Sensitivity Analysis
 
@@ -361,8 +361,8 @@ This does not necessarily mean those species are physically irrelevant. It means
 
 Supporting outputs:
 
-- [feature_sensitivity_summary.csv](../outputs/advanced_analysis/feature_sensitivity_summary.csv)
-- [feature_target_spearman_top_pairs.csv](../outputs/advanced_analysis/feature_target_spearman_top_pairs.csv)
+- [feature_sensitivity_summary.csv](../../outputs/advanced_analysis/feature_sensitivity_summary.csv)
+- [feature_target_spearman_top_pairs.csv](../../outputs/advanced_analysis/feature_target_spearman_top_pairs.csv)
 
 ## 7. Clustering
 
@@ -391,10 +391,10 @@ So the composition progression is not random; it forms a small number of well-de
 
 Supporting outputs:
 
-- [density_group_cluster_scores.csv](../outputs/advanced_analysis/density_group_cluster_scores.csv)
-- [density_group_cluster_assignments.csv](../outputs/advanced_analysis/density_group_cluster_assignments.csv)
-- [density_group_cluster_profiles.csv](../outputs/advanced_analysis/density_group_cluster_profiles.csv)
-- [density_group_clustering_pca.png](../outputs/advanced_figures/density_group_clustering_pca.png)
+- [density_group_cluster_scores.csv](../../outputs/advanced_analysis/density_group_cluster_scores.csv)
+- [density_group_cluster_assignments.csv](../../outputs/advanced_analysis/density_group_cluster_assignments.csv)
+- [density_group_cluster_profiles.csv](../../outputs/advanced_analysis/density_group_cluster_profiles.csv)
+- [density_group_clustering_pca.png](../../outputs/advanced_figures/density_group_clustering_pca.png)
 
 ### Reaction Clustering
 
@@ -409,9 +409,9 @@ This means the remaining 199 reactions are so strongly aligned in their broad re
 
 Supporting outputs:
 
-- [reaction_cluster_scores.csv](../outputs/advanced_analysis/reaction_cluster_scores.csv)
-- [reaction_cluster_assignments.csv](../outputs/advanced_analysis/reaction_cluster_assignments.csv)
-- [reaction_cluster_profiles.csv](../outputs/advanced_analysis/reaction_cluster_profiles.csv)
+- [reaction_cluster_scores.csv](../../outputs/advanced_analysis/reaction_cluster_scores.csv)
+- [reaction_cluster_assignments.csv](../../outputs/advanced_analysis/reaction_cluster_assignments.csv)
+- [reaction_cluster_profiles.csv](../../outputs/advanced_analysis/reaction_cluster_profiles.csv)
 
 ### Case Clustering
 
@@ -428,9 +428,9 @@ This is an important result. It indicates a natural low-`E/N` versus higher-`E/N
 
 Supporting outputs:
 
-- [case_cluster_scores.csv](../outputs/advanced_analysis/case_cluster_scores.csv)
-- [case_cluster_assignments.csv](../outputs/advanced_analysis/case_cluster_assignments.csv)
-- [case_clustering_target_pca.png](../outputs/advanced_figures/case_clustering_target_pca.png)
+- [case_cluster_scores.csv](../../outputs/advanced_analysis/case_cluster_scores.csv)
+- [case_cluster_assignments.csv](../../outputs/advanced_analysis/case_cluster_assignments.csv)
+- [case_clustering_target_pca.png](../../outputs/advanced_figures/case_clustering_target_pca.png)
 
 ## 8. Low-Rank Structure
 
@@ -447,7 +447,7 @@ So the composition space is effectively low-dimensional. Three to four latent co
 
 Supporting outputs:
 
-- [composition_pca_explained_variance.csv](../outputs/advanced_analysis/composition_pca_explained_variance.csv)
+- [composition_pca_explained_variance.csv](../../outputs/advanced_analysis/composition_pca_explained_variance.csv)
 
 ### Output Target Manifold
 
@@ -467,9 +467,9 @@ This is one of the strongest modeling clues in the project. It suggests the 204 
 
 Supporting outputs:
 
-- [target_pca_explained_variance.csv](../outputs/advanced_analysis/target_pca_explained_variance.csv)
-- [low_rank_summary.csv](../outputs/advanced_analysis/low_rank_summary.csv)
-- [target_pca_scree.png](../outputs/advanced_figures/target_pca_scree.png)
+- [target_pca_explained_variance.csv](../../outputs/advanced_analysis/target_pca_explained_variance.csv)
+- [low_rank_summary.csv](../../outputs/advanced_analysis/low_rank_summary.csv)
+- [target_pca_scree.png](../../outputs/advanced_figures/target_pca_scree.png)
 
 ## 9. Baseline Predictability Analysis
 
@@ -492,8 +492,8 @@ This is encouraging, but random splits are the easiest setting for this dataset.
 
 Supporting outputs:
 
-- [baseline_random_split_metrics.csv](../outputs/advanced_analysis/baseline_random_split_metrics.csv)
-- [baseline_model_comparison.png](../outputs/advanced_figures/baseline_model_comparison.png)
+- [baseline_random_split_metrics.csv](../../outputs/advanced_analysis/baseline_random_split_metrics.csv)
+- [baseline_model_comparison.png](../../outputs/advanced_figures/baseline_model_comparison.png)
 
 ## 10. Split Strategy Analysis
 
@@ -550,9 +550,9 @@ This also explains why linear models issued numerical warnings in this analysis 
 
 Supporting outputs:
 
-- [split_strategy_metadata.csv](../outputs/advanced_analysis/split_strategy_metadata.csv)
-- [split_strategy_metrics.csv](../outputs/advanced_analysis/split_strategy_metrics.csv)
-- [split_strategy_comparison.png](../outputs/advanced_figures/split_strategy_comparison.png)
+- [split_strategy_metadata.csv](../../outputs/advanced_analysis/split_strategy_metadata.csv)
+- [split_strategy_metrics.csv](../../outputs/advanced_analysis/split_strategy_metrics.csv)
+- [split_strategy_comparison.png](../../outputs/advanced_figures/split_strategy_comparison.png)
 
 ## 11. Outlier and Anomaly Analysis
 
@@ -585,10 +585,10 @@ These are likely the reactions with the sharpest localized excursions relative t
 
 Supporting outputs:
 
-- [case_anomaly_scores.csv](../outputs/advanced_analysis/case_anomaly_scores.csv)
-- [top_case_anomalies.csv](../outputs/advanced_analysis/top_case_anomalies.csv)
-- [reaction_outlier_propensity.csv](../outputs/advanced_analysis/reaction_outlier_propensity.csv)
-- [case_anomaly_scatter.png](../outputs/advanced_figures/case_anomaly_scatter.png)
+- [case_anomaly_scores.csv](../../outputs/advanced_analysis/case_anomaly_scores.csv)
+- [top_case_anomalies.csv](../../outputs/advanced_analysis/top_case_anomalies.csv)
+- [reaction_outlier_propensity.csv](../../outputs/advanced_analysis/reaction_outlier_propensity.csv)
+- [case_anomaly_scatter.png](../../outputs/advanced_figures/case_anomaly_scatter.png)
 
 ## 12. Feature Engineering Analysis
 
@@ -610,8 +610,8 @@ This means the dataset does not need a high-dimensional raw feature representati
 
 Supporting outputs:
 
-- [feature_set_comparison.csv](../outputs/advanced_analysis/feature_set_comparison.csv)
-- [feature_set_comparison.png](../outputs/advanced_figures/feature_set_comparison.png)
+- [feature_set_comparison.csv](../../outputs/advanced_analysis/feature_set_comparison.csv)
+- [feature_set_comparison.png](../../outputs/advanced_figures/feature_set_comparison.png)
 
 ## Overall Interpretation
 

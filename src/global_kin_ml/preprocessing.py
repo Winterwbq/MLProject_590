@@ -27,6 +27,39 @@ INPUT_PREFIX = "input_"
 TARGET_PREFIX = "rate_const_"
 
 
+@dataclass(frozen=True)
+class TargetSpec:
+    name: str
+    prefix: str
+    long_value_column: str
+    reaction_map_column: str
+    singular_label: str
+    plural_label: str
+    display_name: str
+
+
+TARGET_SPECS = {
+    "rate_const": TargetSpec(
+        name="rate_const",
+        prefix="rate_const_",
+        long_value_column="rate_const",
+        reaction_map_column="rate_const_column",
+        singular_label="rate constant",
+        plural_label="rate constants",
+        display_name="RATE CONST",
+    ),
+    "super_rate": TargetSpec(
+        name="super_rate",
+        prefix="super_rate_",
+        long_value_column="super_rate_cc_per_s",
+        reaction_map_column="super_rate_column",
+        singular_label="super rate",
+        plural_label="super rates",
+        display_name="SUPER RATE",
+    ),
+}
+
+
 @dataclass
 class ValidationFold:
     fold_id: int
@@ -44,6 +77,26 @@ class ExperimentSplits:
 
 def get_case_metadata_columns(frame: pd.DataFrame) -> list[str]:
     return [column for column in CASE_METADATA_CANDIDATES if column in frame.columns]
+
+
+def get_target_spec(target_name: str) -> TargetSpec:
+    if target_name not in TARGET_SPECS:
+        raise ValueError(f"Unsupported target_name: {target_name}")
+    return TARGET_SPECS[target_name]
+
+
+def filter_constant_target_columns(
+    target_frame: pd.DataFrame,
+    target_columns: list[str],
+) -> tuple[list[str], list[str]]:
+    kept = []
+    dropped = []
+    for column in target_columns:
+        if target_frame[column].nunique(dropna=False) > 1:
+            kept.append(column)
+        else:
+            dropped.append(column)
+    return kept, dropped
 
 
 class TargetTransformer:
@@ -66,14 +119,26 @@ class TargetTransformer:
         if self.epsilons_ is None:
             raise RuntimeError("TargetTransformer must be fit before transform.")
         matrix = target_frame[self.target_columns].to_numpy(dtype=float)
-        transformed = np.log10(matrix + self.epsilons_)
+        transformed = self.transform_array(matrix)
         return pd.DataFrame(transformed, columns=self.target_columns, index=target_frame.index)
+
+    def transform_array(self, values: np.ndarray) -> np.ndarray:
+        if self.epsilons_ is None:
+            raise RuntimeError("TargetTransformer must be fit before transform_array.")
+        matrix = np.asarray(values, dtype=float)
+        transformed = np.log10(matrix + self.epsilons_)
+        return transformed
 
     def inverse_transform_array(self, values: np.ndarray) -> np.ndarray:
         if self.epsilons_ is None:
             raise RuntimeError("TargetTransformer must be fit before inverse_transform.")
         restored = np.power(10.0, values) - self.epsilons_
         return np.clip(restored, a_min=0.0, a_max=None)
+
+    def zero_log_values(self) -> np.ndarray:
+        if self.epsilons_ is None:
+            raise RuntimeError("TargetTransformer must be fit before zero_log_values.")
+        return np.log10(self.epsilons_)
 
     def epsilon_frame(self) -> pd.DataFrame:
         if self.epsilons_ is None:

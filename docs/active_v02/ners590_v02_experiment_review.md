@@ -18,10 +18,10 @@ On top of that one merged dataset, we ran two experiment sets:
 These are two different evaluation strategies applied to the same merged dataset and the same curated candidate-model catalog. So the difference between the two experiments is not “different model families” or “different raw files.” The difference is the generalization task we asked the model to solve.
 
 Citations:
-- [`results/ners590_v02/parsed/parser_summary.csv`](../results/ners590_v02/parsed/parser_summary.csv)
-- [`results/ners590_v02/analysis/dataset_summary.csv`](../results/ners590_v02/analysis/dataset_summary.csv)
-- [`results/ners590_v02/training_random_case/tuning/split_metadata.csv`](../results/ners590_v02/training_random_case/tuning/split_metadata.csv)
-- [`results/ners590_v02/training_power_holdout_5mJ/tuning/split_metadata.csv`](../results/ners590_v02/training_power_holdout_5mJ/tuning/split_metadata.csv)
+- [`results/ners590_v02/parsed/parser_summary.csv`](../../results/ners590_v02/parsed/parser_summary.csv)
+- [`results/ners590_v02/analysis/dataset_summary.csv`](../../results/ners590_v02/analysis/dataset_summary.csv)
+- [`results/ners590_v02/training_random_case/tuning/split_metadata.csv`](../../results/ners590_v02/training_random_case/tuning/split_metadata.csv)
+- [`results/ners590_v02/training_power_holdout_5mJ/tuning/split_metadata.csv`](../../results/ners590_v02/training_power_holdout_5mJ/tuning/split_metadata.csv)
 
 ## 2. Purpose of the Two Experiment Sets
 
@@ -43,10 +43,10 @@ Together, these two experiments separate two kinds of success:
 - cross-power generalization success to a held-out power level
 
 Citations:
-- [`docs/ners590_v02_experiment_plan.md`](./ners590_v02_experiment_plan.md)
-- [`results/ners590_v02/training_random_case/tuning/split_metadata.csv`](../results/ners590_v02/training_random_case/tuning/split_metadata.csv)
-- [`results/ners590_v02/training_power_holdout_5mJ/tuning/split_metadata.csv`](../results/ners590_v02/training_power_holdout_5mJ/tuning/split_metadata.csv)
-- [`docs/ners590_v02_analysis_report.md`](./ners590_v02_analysis_report.md)
+- [`ners590_v02_experiment_plan.md`](./ners590_v02_experiment_plan.md)
+- [`results/ners590_v02/training_random_case/tuning/split_metadata.csv`](../../results/ners590_v02/training_random_case/tuning/split_metadata.csv)
+- [`results/ners590_v02/training_power_holdout_5mJ/tuning/split_metadata.csv`](../../results/ners590_v02/training_power_holdout_5mJ/tuning/split_metadata.csv)
+- [`ners590_v02_analysis_report.md`](./ners590_v02_analysis_report.md)
 
 ## 3. Common Training Pipeline Used in Both Sets
 
@@ -78,11 +78,11 @@ The model families tested were:
 For the latent models, the target side was compressed with PCA and the latent dimension used in the curated sweep was `k=8`. These latent models were evaluated on the reconstructed full `204` outputs, not only in latent space. That is important because the final scientific task always requires the full rate vector.
 
 Citations:
-- [`results/ners590_v02/training_random_case/tuning/model_config_catalog.csv`](../results/ners590_v02/training_random_case/tuning/model_config_catalog.csv)
-- [`results/ners590_v02/training_power_holdout_5mJ/tuning/model_config_catalog.csv`](../results/ners590_v02/training_power_holdout_5mJ/tuning/model_config_catalog.csv)
-- [`results/ners590_v02/training_random_case/data_snapshots/feature_set_final_metadata.csv`](../results/ners590_v02/training_random_case/data_snapshots/feature_set_final_metadata.csv)
-- [`results/ners590_v02/training_random_case/data_snapshots/target_epsilons_trainval.csv`](../results/ners590_v02/training_random_case/data_snapshots/target_epsilons_trainval.csv)
-- [`results/ners590_v02/training_random_case/pca/target_pca_explained_variance.csv`](../results/ners590_v02/training_random_case/pca/target_pca_explained_variance.csv)
+- [`results/ners590_v02/training_random_case/tuning/model_config_catalog.csv`](../../results/ners590_v02/training_random_case/tuning/model_config_catalog.csv)
+- [`results/ners590_v02/training_power_holdout_5mJ/tuning/model_config_catalog.csv`](../../results/ners590_v02/training_power_holdout_5mJ/tuning/model_config_catalog.csv)
+- [`results/ners590_v02/training_random_case/data_snapshots/feature_set_final_metadata.csv`](../../results/ners590_v02/training_random_case/data_snapshots/feature_set_final_metadata.csv)
+- [`results/ners590_v02/training_random_case/data_snapshots/target_epsilons_trainval.csv`](../../results/ners590_v02/training_random_case/data_snapshots/target_epsilons_trainval.csv)
+- [`results/ners590_v02/training_random_case/pca/target_pca_explained_variance.csv`](../../results/ners590_v02/training_random_case/pca/target_pca_explained_variance.csv)
 
 ## 4. How the Random-Case Experiment Was Trained
 
@@ -107,9 +107,9 @@ The strongest alternative was the direct FFN:
 So the FFN was genuinely competitive on v02, but the direct extra-trees model still won by a clear margin on the main selection metric.
 
 Citations:
-- [`results/ners590_v02/training_random_case/tuning/selected_model.csv`](../results/ners590_v02/training_random_case/tuning/selected_model.csv)
-- [`results/ners590_v02/training_random_case/tuning/model_leaderboard_summary.csv`](../results/ners590_v02/training_random_case/tuning/model_leaderboard_summary.csv)
-- [`results/ners590_v02/training_random_case/figures/model_leaderboard.png`](../results/ners590_v02/training_random_case/figures/model_leaderboard.png)
+- [`results/ners590_v02/training_random_case/tuning/selected_model.csv`](../../results/ners590_v02/training_random_case/tuning/selected_model.csv)
+- [`results/ners590_v02/training_random_case/tuning/model_leaderboard_summary.csv`](../../results/ners590_v02/training_random_case/tuning/model_leaderboard_summary.csv)
+- [`results/ners590_v02/training_random_case/figures/model_leaderboard.png`](../../results/ners590_v02/training_random_case/figures/model_leaderboard.png)
 
 ## 5. What the Random-Case Experiment Achieved
 
@@ -134,11 +134,11 @@ These numbers indicate very strong interpolation performance. The model is not o
 The one caution is that the raw mean signed relative error is huge. That is not a model-failure signal here. It is the same denominator problem we discussed earlier: a small number of extremely tiny true rates make the raw mean relative error unstable. The more reliable summaries are the median and percentile relative-error statistics, plus SMAPE.
 
 Citations:
-- [`results/ners590_v02/training_random_case/evaluation/test_overall_metrics.csv`](../results/ners590_v02/training_random_case/evaluation/test_overall_metrics.csv)
-- [`results/ners590_v02/training_random_case/evaluation/test_relative_error_overall_summary.csv`](../results/ners590_v02/training_random_case/evaluation/test_relative_error_overall_summary.csv)
-- [`results/ners590_v02/training_random_case/evaluation/test_smape_overall_summary.csv`](../results/ners590_v02/training_random_case/evaluation/test_smape_overall_summary.csv)
-- [`results/ners590_v02/training_random_case/figures/relative_error_abs_histogram.png`](../results/ners590_v02/training_random_case/figures/relative_error_abs_histogram.png)
-- [`results/ners590_v02/training_random_case/figures/smape_histogram.png`](../results/ners590_v02/training_random_case/figures/smape_histogram.png)
+- [`results/ners590_v02/training_random_case/evaluation/test_overall_metrics.csv`](../../results/ners590_v02/training_random_case/evaluation/test_overall_metrics.csv)
+- [`results/ners590_v02/training_random_case/evaluation/test_relative_error_overall_summary.csv`](../../results/ners590_v02/training_random_case/evaluation/test_relative_error_overall_summary.csv)
+- [`results/ners590_v02/training_random_case/evaluation/test_smape_overall_summary.csv`](../../results/ners590_v02/training_random_case/evaluation/test_smape_overall_summary.csv)
+- [`results/ners590_v02/training_random_case/figures/relative_error_abs_histogram.png`](../../results/ners590_v02/training_random_case/figures/relative_error_abs_histogram.png)
+- [`results/ners590_v02/training_random_case/figures/smape_histogram.png`](../../results/ners590_v02/training_random_case/figures/smape_histogram.png)
 
 ## 6. Where the Random-Case Experiment Was Still Hard
 
@@ -159,12 +159,12 @@ The hardest cases were also structured rather than arbitrary. They clustered aro
 So the difficult part of the mapping is still associated with certain low-`E/N` or regime-transition-like cases, even after moving to a much larger dataset.
 
 Citations:
-- [`results/ners590_v02/training_random_case/evaluation/worst_10_reactions.csv`](../results/ners590_v02/training_random_case/evaluation/worst_10_reactions.csv)
-- [`results/ners590_v02/training_random_case/evaluation/worst_10_cases.csv`](../results/ners590_v02/training_random_case/evaluation/worst_10_cases.csv)
-- [`results/ners590_v02/training_random_case/evaluation/test_per_reaction_metrics.csv`](../results/ners590_v02/training_random_case/evaluation/test_per_reaction_metrics.csv)
-- [`results/ners590_v02/training_random_case/evaluation/test_per_case_metrics.csv`](../results/ners590_v02/training_random_case/evaluation/test_per_case_metrics.csv)
-- [`results/ners590_v02/training_random_case/figures/worst_reactions_log_rmse.png`](../results/ners590_v02/training_random_case/figures/worst_reactions_log_rmse.png)
-- [`results/ners590_v02/training_random_case/figures/per_case_log_rmse_distribution.png`](../results/ners590_v02/training_random_case/figures/per_case_log_rmse_distribution.png)
+- [`results/ners590_v02/training_random_case/evaluation/worst_10_reactions.csv`](../../results/ners590_v02/training_random_case/evaluation/worst_10_reactions.csv)
+- [`results/ners590_v02/training_random_case/evaluation/worst_10_cases.csv`](../../results/ners590_v02/training_random_case/evaluation/worst_10_cases.csv)
+- [`results/ners590_v02/training_random_case/evaluation/test_per_reaction_metrics.csv`](../../results/ners590_v02/training_random_case/evaluation/test_per_reaction_metrics.csv)
+- [`results/ners590_v02/training_random_case/evaluation/test_per_case_metrics.csv`](../../results/ners590_v02/training_random_case/evaluation/test_per_case_metrics.csv)
+- [`results/ners590_v02/training_random_case/figures/worst_reactions_log_rmse.png`](../../results/ners590_v02/training_random_case/figures/worst_reactions_log_rmse.png)
+- [`results/ners590_v02/training_random_case/figures/per_case_log_rmse_distribution.png`](../../results/ners590_v02/training_random_case/figures/per_case_log_rmse_distribution.png)
 
 ## 7. How the Power-Holdout Experiment Was Trained
 
@@ -188,10 +188,10 @@ The best direct FFN was again the runner-up:
 That repeatability matters. It suggests the model ranking is stable, not just a quirk of the random split.
 
 Citations:
-- [`results/ners590_v02/training_power_holdout_5mJ/tuning/split_metadata.csv`](../results/ners590_v02/training_power_holdout_5mJ/tuning/split_metadata.csv)
-- [`results/ners590_v02/training_power_holdout_5mJ/tuning/selected_model.csv`](../results/ners590_v02/training_power_holdout_5mJ/tuning/selected_model.csv)
-- [`results/ners590_v02/training_power_holdout_5mJ/tuning/model_leaderboard_summary.csv`](../results/ners590_v02/training_power_holdout_5mJ/tuning/model_leaderboard_summary.csv)
-- [`results/ners590_v02/training_power_holdout_5mJ/figures/model_leaderboard.png`](../results/ners590_v02/training_power_holdout_5mJ/figures/model_leaderboard.png)
+- [`results/ners590_v02/training_power_holdout_5mJ/tuning/split_metadata.csv`](../../results/ners590_v02/training_power_holdout_5mJ/tuning/split_metadata.csv)
+- [`results/ners590_v02/training_power_holdout_5mJ/tuning/selected_model.csv`](../../results/ners590_v02/training_power_holdout_5mJ/tuning/selected_model.csv)
+- [`results/ners590_v02/training_power_holdout_5mJ/tuning/model_leaderboard_summary.csv`](../../results/ners590_v02/training_power_holdout_5mJ/tuning/model_leaderboard_summary.csv)
+- [`results/ners590_v02/training_power_holdout_5mJ/figures/model_leaderboard.png`](../../results/ners590_v02/training_power_holdout_5mJ/figures/model_leaderboard.png)
 
 ## 8. What the Power-Holdout Experiment Achieved
 
@@ -218,11 +218,11 @@ These results are extremely encouraging. In fact, the held-out-`5mJ` log-RMSE is
 - but the fine-grained percent-style calibration does degrade somewhat compared with pure random-case interpolation
 
 Citations:
-- [`results/ners590_v02/training_power_holdout_5mJ/evaluation/test_overall_metrics.csv`](../results/ners590_v02/training_power_holdout_5mJ/evaluation/test_overall_metrics.csv)
-- [`results/ners590_v02/training_power_holdout_5mJ/evaluation/test_relative_error_overall_summary.csv`](../results/ners590_v02/training_power_holdout_5mJ/evaluation/test_relative_error_overall_summary.csv)
-- [`results/ners590_v02/training_power_holdout_5mJ/evaluation/test_smape_overall_summary.csv`](../results/ners590_v02/training_power_holdout_5mJ/evaluation/test_smape_overall_summary.csv)
-- [`results/ners590_v02/training_power_holdout_5mJ/figures/relative_error_abs_histogram.png`](../results/ners590_v02/training_power_holdout_5mJ/figures/relative_error_abs_histogram.png)
-- [`results/ners590_v02/training_power_holdout_5mJ/figures/smape_histogram.png`](../results/ners590_v02/training_power_holdout_5mJ/figures/smape_histogram.png)
+- [`results/ners590_v02/training_power_holdout_5mJ/evaluation/test_overall_metrics.csv`](../../results/ners590_v02/training_power_holdout_5mJ/evaluation/test_overall_metrics.csv)
+- [`results/ners590_v02/training_power_holdout_5mJ/evaluation/test_relative_error_overall_summary.csv`](../../results/ners590_v02/training_power_holdout_5mJ/evaluation/test_relative_error_overall_summary.csv)
+- [`results/ners590_v02/training_power_holdout_5mJ/evaluation/test_smape_overall_summary.csv`](../../results/ners590_v02/training_power_holdout_5mJ/evaluation/test_smape_overall_summary.csv)
+- [`results/ners590_v02/training_power_holdout_5mJ/figures/relative_error_abs_histogram.png`](../../results/ners590_v02/training_power_holdout_5mJ/figures/relative_error_abs_histogram.png)
+- [`results/ners590_v02/training_power_holdout_5mJ/figures/smape_histogram.png`](../../results/ners590_v02/training_power_holdout_5mJ/figures/smape_histogram.png)
 
 ## 9. Where the Power-Holdout Experiment Was Still Hard
 
@@ -244,12 +244,12 @@ The hardest held-out cases were concentrated in the `5mJ` file around:
 This again points to structured difficulty in specific regions of the response surface, especially early-to-mid local-case regimes.
 
 Citations:
-- [`results/ners590_v02/training_power_holdout_5mJ/evaluation/worst_10_reactions.csv`](../results/ners590_v02/training_power_holdout_5mJ/evaluation/worst_10_reactions.csv)
-- [`results/ners590_v02/training_power_holdout_5mJ/evaluation/worst_10_cases.csv`](../results/ners590_v02/training_power_holdout_5mJ/evaluation/worst_10_cases.csv)
-- [`results/ners590_v02/training_power_holdout_5mJ/evaluation/test_per_reaction_metrics.csv`](../results/ners590_v02/training_power_holdout_5mJ/evaluation/test_per_reaction_metrics.csv)
-- [`results/ners590_v02/training_power_holdout_5mJ/evaluation/test_per_case_metrics.csv`](../results/ners590_v02/training_power_holdout_5mJ/evaluation/test_per_case_metrics.csv)
-- [`results/ners590_v02/training_power_holdout_5mJ/figures/worst_reactions_log_rmse.png`](../results/ners590_v02/training_power_holdout_5mJ/figures/worst_reactions_log_rmse.png)
-- [`results/ners590_v02/training_power_holdout_5mJ/figures/per_case_log_rmse_distribution.png`](../results/ners590_v02/training_power_holdout_5mJ/figures/per_case_log_rmse_distribution.png)
+- [`results/ners590_v02/training_power_holdout_5mJ/evaluation/worst_10_reactions.csv`](../../results/ners590_v02/training_power_holdout_5mJ/evaluation/worst_10_reactions.csv)
+- [`results/ners590_v02/training_power_holdout_5mJ/evaluation/worst_10_cases.csv`](../../results/ners590_v02/training_power_holdout_5mJ/evaluation/worst_10_cases.csv)
+- [`results/ners590_v02/training_power_holdout_5mJ/evaluation/test_per_reaction_metrics.csv`](../../results/ners590_v02/training_power_holdout_5mJ/evaluation/test_per_reaction_metrics.csv)
+- [`results/ners590_v02/training_power_holdout_5mJ/evaluation/test_per_case_metrics.csv`](../../results/ners590_v02/training_power_holdout_5mJ/evaluation/test_per_case_metrics.csv)
+- [`results/ners590_v02/training_power_holdout_5mJ/figures/worst_reactions_log_rmse.png`](../../results/ners590_v02/training_power_holdout_5mJ/figures/worst_reactions_log_rmse.png)
+- [`results/ners590_v02/training_power_holdout_5mJ/figures/per_case_log_rmse_distribution.png`](../../results/ners590_v02/training_power_holdout_5mJ/figures/per_case_log_rmse_distribution.png)
 
 ## 10. Comparison Between the Two Experiment Sets
 
@@ -271,10 +271,10 @@ Fourth, the same model won both experiments. That gives us a stable baseline:
 Fifth, power generalization is not the main bottleneck right now. The harder issue appears to be a specific subset of reactions and a specific subset of low- to mid-local-case regimes.
 
 Citations:
-- [`results/ners590_v02/training_random_case/tuning/model_leaderboard_summary.csv`](../results/ners590_v02/training_random_case/tuning/model_leaderboard_summary.csv)
-- [`results/ners590_v02/training_power_holdout_5mJ/tuning/model_leaderboard_summary.csv`](../results/ners590_v02/training_power_holdout_5mJ/tuning/model_leaderboard_summary.csv)
-- [`results/ners590_v02/training_random_case/tuning/selected_model.csv`](../results/ners590_v02/training_random_case/tuning/selected_model.csv)
-- [`results/ners590_v02/training_power_holdout_5mJ/tuning/selected_model.csv`](../results/ners590_v02/training_power_holdout_5mJ/tuning/selected_model.csv)
+- [`results/ners590_v02/training_random_case/tuning/model_leaderboard_summary.csv`](../../results/ners590_v02/training_random_case/tuning/model_leaderboard_summary.csv)
+- [`results/ners590_v02/training_power_holdout_5mJ/tuning/model_leaderboard_summary.csv`](../../results/ners590_v02/training_power_holdout_5mJ/tuning/model_leaderboard_summary.csv)
+- [`results/ners590_v02/training_random_case/tuning/selected_model.csv`](../../results/ners590_v02/training_random_case/tuning/selected_model.csv)
+- [`results/ners590_v02/training_power_holdout_5mJ/tuning/selected_model.csv`](../../results/ners590_v02/training_power_holdout_5mJ/tuning/selected_model.csv)
 
 ## 11. Final Interpretation
 
@@ -290,6 +290,6 @@ The current headline result is not merely that the model fits random held-out ro
 That makes the current v02 pipeline a strong publishable baseline.
 
 Citations:
-- [`docs/ners590_v02_dataset_overview.md`](./ners590_v02_dataset_overview.md)
-- [`docs/ners590_v02_analysis_report.md`](./ners590_v02_analysis_report.md)
-- [`docs/ners590_v02_training_report.md`](./ners590_v02_training_report.md)
+- [`ners590_v02_dataset_overview.md`](./ners590_v02_dataset_overview.md)
+- [`ners590_v02_analysis_report.md`](./ners590_v02_analysis_report.md)
+- [`ners590_v02_joint_rate_super_rate_experiment_report.md`](./ners590_v02_joint_rate_super_rate_experiment_report.md)

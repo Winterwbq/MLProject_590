@@ -6,26 +6,26 @@ This report explains why the two feed-forward-network baselines underperformed t
 
 Models compared:
 
-- main random forest: [`results/full_training_pipeline`](../results/full_training_pipeline)
-- FFN baseline 1: [`results/ffn_baselines/direct_all_inputs_end_to_end`](../results/ffn_baselines/direct_all_inputs_end_to_end)
-- FFN baseline 2: [`results/ffn_baselines/rf_replacement_composition_pca`](../results/ffn_baselines/rf_replacement_composition_pca)
+- main random forest: [`results/full_training_pipeline`](../../results/full_training_pipeline)
+- FFN baseline 1: [`results/ffn_baselines/direct_all_inputs_end_to_end`](../../results/ffn_baselines/direct_all_inputs_end_to_end)
+- FFN baseline 2: [`results/ffn_baselines/rf_replacement_composition_pca`](../../results/ffn_baselines/rf_replacement_composition_pca)
 
 Primary comparison artifacts:
 
-- overall comparison table: [`results/ffn_baselines/comparison_analysis/overall_model_comparison.csv`](../results/ffn_baselines/comparison_analysis/overall_model_comparison.csv)
-- per-case comparison table: [`results/ffn_baselines/comparison_analysis/per_case_log_rmse_comparison.csv`](../results/ffn_baselines/comparison_analysis/per_case_log_rmse_comparison.csv)
-- per-case summary table: [`results/ffn_baselines/comparison_analysis/per_case_log_rmse_distribution_summary.csv`](../results/ffn_baselines/comparison_analysis/per_case_log_rmse_distribution_summary.csv)
-- per-reaction comparison table: [`results/ffn_baselines/comparison_analysis/per_reaction_log_rmse_comparison.csv`](../results/ffn_baselines/comparison_analysis/per_reaction_log_rmse_comparison.csv)
-- per-reaction summary table: [`results/ffn_baselines/comparison_analysis/per_reaction_log_rmse_distribution_summary.csv`](../results/ffn_baselines/comparison_analysis/per_reaction_log_rmse_distribution_summary.csv)
-- magnitude-binned relative-error table: [`results/ffn_baselines/comparison_analysis/relative_error_by_magnitude_comparison.csv`](../results/ffn_baselines/comparison_analysis/relative_error_by_magnitude_comparison.csv)
-- overall comparison plot: [`results/ffn_baselines/comparison_figures/overall_log_rmse_comparison.png`](../results/ffn_baselines/comparison_figures/overall_log_rmse_comparison.png)
-- per-case histogram: [`results/ffn_baselines/comparison_figures/per_case_log_rmse_histogram.png`](../results/ffn_baselines/comparison_figures/per_case_log_rmse_histogram.png)
-- worst-reaction gap plot: [`results/ffn_baselines/comparison_figures/worst_reaction_gaps_ffn_all_vs_rf.png`](../results/ffn_baselines/comparison_figures/worst_reaction_gaps_ffn_all_vs_rf.png)
-- magnitude comparison plot: [`results/ffn_baselines/comparison_figures/relative_error_by_magnitude_comparison.png`](../results/ffn_baselines/comparison_figures/relative_error_by_magnitude_comparison.png)
+- overall comparison table: [`results/ffn_baselines/comparison_analysis/overall_model_comparison.csv`](../../results/ffn_baselines/comparison_analysis/overall_model_comparison.csv)
+- per-case comparison table: [`results/ffn_baselines/comparison_analysis/per_case_log_rmse_comparison.csv`](../../results/ffn_baselines/comparison_analysis/per_case_log_rmse_comparison.csv)
+- per-case summary table: [`results/ffn_baselines/comparison_analysis/per_case_log_rmse_distribution_summary.csv`](../../results/ffn_baselines/comparison_analysis/per_case_log_rmse_distribution_summary.csv)
+- per-reaction comparison table: [`results/ffn_baselines/comparison_analysis/per_reaction_log_rmse_comparison.csv`](../../results/ffn_baselines/comparison_analysis/per_reaction_log_rmse_comparison.csv)
+- per-reaction summary table: [`results/ffn_baselines/comparison_analysis/per_reaction_log_rmse_distribution_summary.csv`](../../results/ffn_baselines/comparison_analysis/per_reaction_log_rmse_distribution_summary.csv)
+- magnitude-binned relative-error table: [`results/ffn_baselines/comparison_analysis/relative_error_by_magnitude_comparison.csv`](../../results/ffn_baselines/comparison_analysis/relative_error_by_magnitude_comparison.csv)
+- overall comparison plot: [`results/ffn_baselines/comparison_figures/overall_log_rmse_comparison.png`](../../results/ffn_baselines/comparison_figures/overall_log_rmse_comparison.png)
+- per-case histogram: [`results/ffn_baselines/comparison_figures/per_case_log_rmse_histogram.png`](../../results/ffn_baselines/comparison_figures/per_case_log_rmse_histogram.png)
+- worst-reaction gap plot: [`results/ffn_baselines/comparison_figures/worst_reaction_gaps_ffn_all_vs_rf.png`](../../results/ffn_baselines/comparison_figures/worst_reaction_gaps_ffn_all_vs_rf.png)
+- magnitude comparison plot: [`results/ffn_baselines/comparison_figures/relative_error_by_magnitude_comparison.png`](../../results/ffn_baselines/comparison_figures/relative_error_by_magnitude_comparison.png)
 
 Dataset context used in the interpretation:
 
-- parsed dataset summary: [`outputs/analysis/dataset_summary.csv`](../outputs/analysis/dataset_summary.csv)
+- parsed dataset summary: [`outputs/analysis/dataset_summary.csv`](../../outputs/analysis/dataset_summary.csv)
 - advanced report: [`advanced_dataset_analysis_report.md`](./advanced_dataset_analysis_report.md)
 - training report: [`training_experiment_report.md`](./training_experiment_report.md)
 
@@ -35,13 +35,13 @@ The random forest wins here because the problem is a small, highly structured, t
 
 ## 1. The Data Regime Favors Tree Partitioning
 
-The dataset has only `609` total cases, with `21` unique density groups and `29` local `E/N` positions per group, as recorded in [`outputs/analysis/dataset_summary.csv`](../outputs/analysis/dataset_summary.csv). The earlier advanced analysis already showed that the dataset is highly structured rather than freely sampled, and that `E/N` is the dominant driver while composition changes across only `21` trajectories; see [`advanced_dataset_analysis_report.md`](./advanced_dataset_analysis_report.md) and its cited outputs.
+The dataset has only `609` total cases, with `21` unique density groups and `29` local `E/N` positions per group, as recorded in [`outputs/analysis/dataset_summary.csv`](../../outputs/analysis/dataset_summary.csv). The earlier advanced analysis already showed that the dataset is highly structured rather than freely sampled, and that `E/N` is the dominant driver while composition changes across only `21` trajectories; see [`advanced_dataset_analysis_report.md`](./advanced_dataset_analysis_report.md) and its cited outputs.
 
 This matters because the FFN is trying to learn a smooth global mapping from a small amount of tabular data, while the random forest can fit a set of local partitions that align naturally with discrete composition groups, sharp `E/N` thresholds, and reaction-specific changes in target behavior. That is an inference from the dataset structure and the observed error patterns below, not a direct theorem.
 
 ## 2. The Random Forest Is Better on Every Headline Metric That Matters
 
-The locked-test comparison in [`results/ffn_baselines/comparison_analysis/overall_model_comparison.csv`](../results/ffn_baselines/comparison_analysis/overall_model_comparison.csv) is decisive:
+The locked-test comparison in [`results/ffn_baselines/comparison_analysis/overall_model_comparison.csv`](../../results/ffn_baselines/comparison_analysis/overall_model_comparison.csv) is decisive:
 
 - random forest overall log-RMSE: `0.203350`
 - FFN all-inputs overall log-RMSE: `0.246912`
@@ -64,10 +64,10 @@ The random forest is also much better on robust percent-style error summaries:
 
 These same numbers are also visible in the source experiment files:
 
-- random forest overall metrics: [`results/full_training_pipeline/evaluation/test_overall_metrics.csv`](../results/full_training_pipeline/evaluation/test_overall_metrics.csv)
-- random forest relative-error summary: [`results/full_training_pipeline/evaluation/test_relative_error_overall_summary.csv`](../results/full_training_pipeline/evaluation/test_relative_error_overall_summary.csv)
-- random forest SMAPE summary: [`results/full_training_pipeline/evaluation/test_smape_overall_summary.csv`](../results/full_training_pipeline/evaluation/test_smape_overall_summary.csv)
-- FFN summary table: [`results/ffn_baselines/ffn_baseline_comparison_summary.csv`](../results/ffn_baselines/ffn_baseline_comparison_summary.csv)
+- random forest overall metrics: [`results/full_training_pipeline/evaluation/test_overall_metrics.csv`](../../results/full_training_pipeline/evaluation/test_overall_metrics.csv)
+- random forest relative-error summary: [`results/full_training_pipeline/evaluation/test_relative_error_overall_summary.csv`](../../results/full_training_pipeline/evaluation/test_relative_error_overall_summary.csv)
+- random forest SMAPE summary: [`results/full_training_pipeline/evaluation/test_smape_overall_summary.csv`](../../results/full_training_pipeline/evaluation/test_smape_overall_summary.csv)
+- FFN summary table: [`results/ffn_baselines/ffn_baseline_comparison_summary.csv`](../../results/ffn_baselines/ffn_baseline_comparison_summary.csv)
 
 So the gap is not only in one metric or one output space. The forest is better in log space, better in relative calibration, and better in bounded percentage-like error.
 
@@ -75,7 +75,7 @@ So the gap is not only in one metric or one output space. The forest is better i
 
 The most important diagnostic is the per-case distribution, because it tells us whether the FFNs are failing only on a few pathological cases or are systematically less precise.
 
-The per-case summary in [`results/ffn_baselines/comparison_analysis/per_case_log_rmse_distribution_summary.csv`](../results/ffn_baselines/comparison_analysis/per_case_log_rmse_distribution_summary.csv) shows:
+The per-case summary in [`results/ffn_baselines/comparison_analysis/per_case_log_rmse_distribution_summary.csv`](../../results/ffn_baselines/comparison_analysis/per_case_log_rmse_distribution_summary.csv) shows:
 
 - random forest median case log-RMSE: `0.001029`
 - FFN all-inputs median case log-RMSE: `0.127481`
@@ -92,20 +92,20 @@ The upper quantiles tell the same story:
   - FFN all-inputs: `0.384660`
   - FFN PCA-feature: `0.323860`
 
-These distributions are visualized in [`results/ffn_baselines/comparison_figures/per_case_log_rmse_histogram.png`](../results/ffn_baselines/comparison_figures/per_case_log_rmse_histogram.png).
+These distributions are visualized in [`results/ffn_baselines/comparison_figures/per_case_log_rmse_histogram.png`](../../results/ffn_baselines/comparison_figures/per_case_log_rmse_histogram.png).
 
 One nuance matters here: the random forest does have a slightly worse maximum case error than the all-inputs FFN (`1.330477` versus `0.814619`), while the PCA-feature FFN is worst overall at `1.412968`. That means the random forest is not uniformly better in the strict worst-case sense. But the medians and upper-middle quantiles are so much better that the forest is clearly more accurate on most of the test set. This pattern is consistent with a model that captures most local regimes very well but still misses a few hard corners, while the FFNs spread moderate error much more broadly.
 
 The cases where the FFNs lag the random forest most are exported directly in:
 
-- [`results/ffn_baselines/comparison_analysis/worst_20_cases_ffn_all_vs_rf.csv`](../results/ffn_baselines/comparison_analysis/worst_20_cases_ffn_all_vs_rf.csv)
-- [`results/ffn_baselines/comparison_analysis/worst_20_cases_ffn_pca_vs_rf.csv`](../results/ffn_baselines/comparison_analysis/worst_20_cases_ffn_pca_vs_rf.csv)
+- [`results/ffn_baselines/comparison_analysis/worst_20_cases_ffn_all_vs_rf.csv`](../../results/ffn_baselines/comparison_analysis/worst_20_cases_ffn_all_vs_rf.csv)
+- [`results/ffn_baselines/comparison_analysis/worst_20_cases_ffn_pca_vs_rf.csv`](../../results/ffn_baselines/comparison_analysis/worst_20_cases_ffn_pca_vs_rf.csv)
 
 Several of the largest FFN gaps occur at low local-case indices such as density group `11`, local cases `1` and `2`, and density group `2`, local cases `1` and `2`. That suggests the FFNs are especially weaker in early-`E/N` regimes where fewer reactions are active and the mapping may be more threshold-like.
 
 ## 4. FFNs Also Trail Across the Reaction Axis, Not Only Across Cases
 
-The per-reaction summary in [`results/ffn_baselines/comparison_analysis/per_reaction_log_rmse_distribution_summary.csv`](../results/ffn_baselines/comparison_analysis/per_reaction_log_rmse_distribution_summary.csv) shows:
+The per-reaction summary in [`results/ffn_baselines/comparison_analysis/per_reaction_log_rmse_distribution_summary.csv`](../../results/ffn_baselines/comparison_analysis/per_reaction_log_rmse_distribution_summary.csv) shows:
 
 - random forest median reaction log-RMSE: `0.013282`
 - FFN all-inputs median reaction log-RMSE: `0.091937`
@@ -115,8 +115,8 @@ This is a large gap. It says the FFN problem is not just that a few individual c
 
 The reaction-level gap is especially visible in the exported top-gap tables:
 
-- [`results/ffn_baselines/comparison_analysis/worst_20_reactions_ffn_all_vs_rf.csv`](../results/ffn_baselines/comparison_analysis/worst_20_reactions_ffn_all_vs_rf.csv)
-- [`results/ffn_baselines/comparison_analysis/worst_20_reactions_ffn_pca_vs_rf.csv`](../results/ffn_baselines/comparison_analysis/worst_20_reactions_ffn_pca_vs_rf.csv)
+- [`results/ffn_baselines/comparison_analysis/worst_20_reactions_ffn_all_vs_rf.csv`](../../results/ffn_baselines/comparison_analysis/worst_20_reactions_ffn_all_vs_rf.csv)
+- [`results/ffn_baselines/comparison_analysis/worst_20_reactions_ffn_pca_vs_rf.csv`](../../results/ffn_baselines/comparison_analysis/worst_20_reactions_ffn_pca_vs_rf.csv)
 
 Representative examples:
 
@@ -133,11 +133,11 @@ Representative examples:
   - FFN all-inputs: `0.423444`
   - FFN PCA-feature: `0.291665`
 
-These are not tiny differences. They indicate that the forest is preserving some sharp or sparse channels much better than the FFNs. The visualization in [`results/ffn_baselines/comparison_figures/worst_reaction_gaps_ffn_all_vs_rf.png`](../results/ffn_baselines/comparison_figures/worst_reaction_gaps_ffn_all_vs_rf.png) makes this easy to inspect.
+These are not tiny differences. They indicate that the forest is preserving some sharp or sparse channels much better than the FFNs. The visualization in [`results/ffn_baselines/comparison_figures/worst_reaction_gaps_ffn_all_vs_rf.png`](../../results/ffn_baselines/comparison_figures/worst_reaction_gaps_ffn_all_vs_rf.png) makes this easy to inspect.
 
 ## 5. The Relative-Error Gap Persists Across Almost Every Magnitude Range
 
-The most convincing evidence that this is a real modeling gap, rather than just a metric artifact, is the magnitude-binned error comparison in [`results/ffn_baselines/comparison_analysis/relative_error_by_magnitude_comparison.csv`](../results/ffn_baselines/comparison_analysis/relative_error_by_magnitude_comparison.csv), visualized in [`results/ffn_baselines/comparison_figures/relative_error_by_magnitude_comparison.png`](../results/ffn_baselines/comparison_figures/relative_error_by_magnitude_comparison.png).
+The most convincing evidence that this is a real modeling gap, rather than just a metric artifact, is the magnitude-binned error comparison in [`results/ffn_baselines/comparison_analysis/relative_error_by_magnitude_comparison.csv`](../../results/ffn_baselines/comparison_analysis/relative_error_by_magnitude_comparison.csv), visualized in [`results/ffn_baselines/comparison_figures/relative_error_by_magnitude_comparison.png`](../../results/ffn_baselines/comparison_figures/relative_error_by_magnitude_comparison.png).
 
 Examples:
 
@@ -162,7 +162,7 @@ So the forest is not only better on tiny near-zero channels where percentage met
 
 ## 6. PCA Features Help FFN Calibration Slightly, but They Do Not Solve the Core Problem
 
-The two FFN baselines tell an important story by themselves, via [`results/ffn_baselines/ffn_baseline_comparison_summary.csv`](../results/ffn_baselines/ffn_baseline_comparison_summary.csv):
+The two FFN baselines tell an important story by themselves, via [`results/ffn_baselines/ffn_baseline_comparison_summary.csv`](../../results/ffn_baselines/ffn_baseline_comparison_summary.csv):
 
 - the all-inputs FFN is better on the main log-RMSE metric (`0.246912` vs `0.263759`)
 - the PCA-feature FFN is slightly better on robust percent-style metrics such as median absolute relative error and median SMAPE

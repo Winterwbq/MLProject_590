@@ -47,8 +47,31 @@ def main() -> None:
     reaction_power_sensitivity = pd.read_csv(args.analysis_dir / "reaction_power_sensitivity_summary.csv")
     reaction_summary = pd.read_csv(args.analysis_dir / "reaction_summary.csv")
 
+    power_order = (
+        power_summary.sort_values("power_mj")["power_label"].drop_duplicates().tolist()
+    )
+    if power_order:
+        power_summary["power_label"] = pd.Categorical(
+            power_summary["power_label"], categories=power_order, ordered=True
+        )
+        e_over_n_by_power["power_label"] = pd.Categorical(
+            e_over_n_by_power["power_label"], categories=power_order, ordered=True
+        )
+        input_species_by_power["power_label"] = pd.Categorical(
+            input_species_by_power["power_label"], categories=power_order, ordered=True
+        )
+        rate_by_power["power_label"] = pd.Categorical(
+            rate_by_power["power_label"], categories=power_order, ordered=True
+        )
+
     fig, ax = plt.subplots(figsize=(7, 4.5))
-    sns.barplot(data=power_summary, x="power_label", y="case_count", ax=ax, color="#3a7ca5")
+    sns.barplot(
+        data=power_summary.sort_values("power_mj"),
+        x="power_label",
+        y="case_count",
+        ax=ax,
+        color="#3a7ca5",
+    )
     ax.set_title("Case Count by Power")
     ax.set_xlabel("Power")
     ax.set_ylabel("Cases")
@@ -56,7 +79,7 @@ def main() -> None:
 
     fig, ax = plt.subplots(figsize=(9, 4.8))
     sns.lineplot(
-        data=e_over_n_by_power,
+        data=e_over_n_by_power.sort_values(["power_mj", "local_case_id"]),
         x="local_case_id",
         y="e_over_n_v_cm2",
         hue="power_label",
@@ -78,6 +101,9 @@ def main() -> None:
     )
     top_species_frame = input_species_by_power[input_species_by_power["species_label"].isin(top_species)].copy()
     heatmap_frame = top_species_frame.pivot(index="species_label", columns="power_label", values="mean")
+    if power_order:
+        available_columns = [label for label in power_order if label in heatmap_frame.columns]
+        heatmap_frame = heatmap_frame.reindex(columns=available_columns)
     fig, ax = plt.subplots(figsize=(8, 5.2))
     sns.heatmap(heatmap_frame, cmap="viridis", ax=ax)
     ax.set_title("Mean Mole Fraction by Power for Top-Varying Species")
@@ -86,7 +112,13 @@ def main() -> None:
     save(fig, args.output_dir / "input_species_mean_heatmap_by_power.png")
 
     fig, ax = plt.subplots(figsize=(7.5, 4.5))
-    sns.barplot(data=rate_by_power.sort_values("power_mj"), x="power_label", y="median", ax=ax, color="#7c9885")
+    sns.barplot(
+        data=rate_by_power.sort_values("power_mj"),
+        x="power_label",
+        y="median",
+        ax=ax,
+        color="#7c9885",
+    )
     ax.set_yscale("log")
     ax.set_title("Median Rate Constant by Power")
     ax.set_xlabel("Power")

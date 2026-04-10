@@ -12,14 +12,14 @@ This report summarizes the end-to-end training run from raw parsing through fina
 
 Primary supporting outputs:
 
-- [`selected_model.csv`](../results/full_training_pipeline/tuning/selected_model.csv)
-- [`model_leaderboard_summary.csv`](../results/full_training_pipeline/tuning/model_leaderboard_summary.csv)
-- [`search_stage_summary.csv`](../results/full_training_pipeline/tuning/search_stage_summary.csv)
-- [`test_overall_metrics.csv`](../results/full_training_pipeline/evaluation/test_overall_metrics.csv)
-- [`test_relative_error_overall_summary.csv`](../results/full_training_pipeline/evaluation/test_relative_error_overall_summary.csv)
-- [`test_smape_overall_summary.csv`](../results/full_training_pipeline/evaluation/test_smape_overall_summary.csv)
-- [`oracle_test_overall_by_k.csv`](../results/full_training_pipeline/pca/oracle_test_overall_by_k.csv)
-- [`verification_checks.csv`](../results/full_training_pipeline/verification_checks.csv)
+- [`selected_model.csv`](../../results/full_training_pipeline/tuning/selected_model.csv)
+- [`model_leaderboard_summary.csv`](../../results/full_training_pipeline/tuning/model_leaderboard_summary.csv)
+- [`search_stage_summary.csv`](../../results/full_training_pipeline/tuning/search_stage_summary.csv)
+- [`test_overall_metrics.csv`](../../results/full_training_pipeline/evaluation/test_overall_metrics.csv)
+- [`test_relative_error_overall_summary.csv`](../../results/full_training_pipeline/evaluation/test_relative_error_overall_summary.csv)
+- [`test_smape_overall_summary.csv`](../../results/full_training_pipeline/evaluation/test_smape_overall_summary.csv)
+- [`oracle_test_overall_by_k.csv`](../../results/full_training_pipeline/pca/oracle_test_overall_by_k.csv)
+- [`verification_checks.csv`](../../results/full_training_pipeline/verification_checks.csv)
 
 ## Main Findings
 
@@ -27,7 +27,7 @@ The winning configuration was `direct__random_forest__composition_pca_plus_log_e
 
 On the locked test split, the final model achieved overall log-space RMSE `0.203350`, log-space MAE `0.014383`, and log-space R2 `0.996972`. In original rate-constant space, the model achieved RMSE `2.802643e-05` and MAE `1.333844e-06`.
 
-The best oracle PCA reconstruction on the locked test split was at `k=12` with reconstruction log-RMSE `0.055975`. This value is the compression-only ceiling from [`oracle_test_overall_by_k.csv`](../results/full_training_pipeline/pca/oracle_test_overall_by_k.csv).
+The best oracle PCA reconstruction on the locked test split was at `k=12` with reconstruction log-RMSE `0.055975`. This value is the compression-only ceiling from [`oracle_test_overall_by_k.csv`](../../results/full_training_pipeline/pca/oracle_test_overall_by_k.csv).
 
 For raw percent-style error on positive-ground-truth outputs, the median absolute relative error was `3.883201e-05`, the 95th percentile was `3.008085e-02`, and `0.972867` of positive predictions were within 10% relative error. These summaries are based only on entries where the true rate constant is greater than zero.
 
@@ -35,17 +35,17 @@ As a safer bounded alternative, the overall median `SMAPE` was `2.815656e-05`, t
 
 Supporting outputs:
 
-- [`test_overall_metrics.csv`](../results/full_training_pipeline/evaluation/test_overall_metrics.csv)
-- [`test_relative_error_overall_summary.csv`](../results/full_training_pipeline/evaluation/test_relative_error_overall_summary.csv)
-- [`test_relative_error_by_magnitude_bin.csv`](../results/full_training_pipeline/evaluation/test_relative_error_by_magnitude_bin.csv)
-- [`test_smape_overall_summary.csv`](../results/full_training_pipeline/evaluation/test_smape_overall_summary.csv)
-- [`test_smape_by_magnitude_bin.csv`](../results/full_training_pipeline/evaluation/test_smape_by_magnitude_bin.csv)
-- [`worst_10_reactions.csv`](../results/full_training_pipeline/evaluation/worst_10_reactions.csv)
-- [`worst_10_cases.csv`](../results/full_training_pipeline/evaluation/worst_10_cases.csv)
-- [`model_leaderboard.png`](../results/full_training_pipeline/figures/model_leaderboard.png)
-- [`oracle_reconstruction_error_by_k.png`](../results/full_training_pipeline/figures/oracle_reconstruction_error_by_k.png)
-- [`relative_error_abs_histogram.png`](../results/full_training_pipeline/figures/relative_error_abs_histogram.png)
-- [`smape_histogram.png`](../results/full_training_pipeline/figures/smape_histogram.png)
+- [`test_overall_metrics.csv`](../../results/full_training_pipeline/evaluation/test_overall_metrics.csv)
+- [`test_relative_error_overall_summary.csv`](../../results/full_training_pipeline/evaluation/test_relative_error_overall_summary.csv)
+- [`test_relative_error_by_magnitude_bin.csv`](../../results/full_training_pipeline/evaluation/test_relative_error_by_magnitude_bin.csv)
+- [`test_smape_overall_summary.csv`](../../results/full_training_pipeline/evaluation/test_smape_overall_summary.csv)
+- [`test_smape_by_magnitude_bin.csv`](../../results/full_training_pipeline/evaluation/test_smape_by_magnitude_bin.csv)
+- [`worst_10_reactions.csv`](../../results/full_training_pipeline/evaluation/worst_10_reactions.csv)
+- [`worst_10_cases.csv`](../../results/full_training_pipeline/evaluation/worst_10_cases.csv)
+- [`model_leaderboard.png`](../../results/full_training_pipeline/figures/model_leaderboard.png)
+- [`oracle_reconstruction_error_by_k.png`](../../results/full_training_pipeline/figures/oracle_reconstruction_error_by_k.png)
+- [`relative_error_abs_histogram.png`](../../results/full_training_pipeline/figures/relative_error_abs_histogram.png)
+- [`smape_histogram.png`](../../results/full_training_pipeline/figures/smape_histogram.png)
 
 ## Top Validation Configurations
 
@@ -57,8 +57,8 @@ Supporting outputs:
 
 Supporting outputs:
 
-- [`model_leaderboard_summary.csv`](../results/full_training_pipeline/tuning/model_leaderboard_summary.csv)
-- [`model_trials_foldwise.csv`](../results/full_training_pipeline/tuning/model_trials_foldwise.csv)
+- [`model_leaderboard_summary.csv`](../../results/full_training_pipeline/tuning/model_leaderboard_summary.csv)
+- [`model_trials_foldwise.csv`](../../results/full_training_pipeline/tuning/model_trials_foldwise.csv)
 
 ## Hardest Reactions and Cases
 
@@ -142,16 +142,16 @@ Worst test cases by median SMAPE:
 
 Supporting outputs:
 
-- [`test_per_reaction_metrics.csv`](../results/full_training_pipeline/evaluation/test_per_reaction_metrics.csv)
-- [`test_per_case_metrics.csv`](../results/full_training_pipeline/evaluation/test_per_case_metrics.csv)
-- [`test_relative_error_per_reaction.csv`](../results/full_training_pipeline/evaluation/test_relative_error_per_reaction.csv)
-- [`test_relative_error_per_case.csv`](../results/full_training_pipeline/evaluation/test_relative_error_per_case.csv)
-- [`test_smape_per_reaction.csv`](../results/full_training_pipeline/evaluation/test_smape_per_reaction.csv)
-- [`test_smape_per_case.csv`](../results/full_training_pipeline/evaluation/test_smape_per_case.csv)
-- [`worst_reactions_log_rmse.png`](../results/full_training_pipeline/figures/worst_reactions_log_rmse.png)
-- [`per_case_log_rmse_distribution.png`](../results/full_training_pipeline/figures/per_case_log_rmse_distribution.png)
-- [`relative_error_by_magnitude.png`](../results/full_training_pipeline/figures/relative_error_by_magnitude.png)
-- [`smape_by_magnitude.png`](../results/full_training_pipeline/figures/smape_by_magnitude.png)
+- [`test_per_reaction_metrics.csv`](../../results/full_training_pipeline/evaluation/test_per_reaction_metrics.csv)
+- [`test_per_case_metrics.csv`](../../results/full_training_pipeline/evaluation/test_per_case_metrics.csv)
+- [`test_relative_error_per_reaction.csv`](../../results/full_training_pipeline/evaluation/test_relative_error_per_reaction.csv)
+- [`test_relative_error_per_case.csv`](../../results/full_training_pipeline/evaluation/test_relative_error_per_case.csv)
+- [`test_smape_per_reaction.csv`](../../results/full_training_pipeline/evaluation/test_smape_per_reaction.csv)
+- [`test_smape_per_case.csv`](../../results/full_training_pipeline/evaluation/test_smape_per_case.csv)
+- [`worst_reactions_log_rmse.png`](../../results/full_training_pipeline/figures/worst_reactions_log_rmse.png)
+- [`per_case_log_rmse_distribution.png`](../../results/full_training_pipeline/figures/per_case_log_rmse_distribution.png)
+- [`relative_error_by_magnitude.png`](../../results/full_training_pipeline/figures/relative_error_by_magnitude.png)
+- [`smape_by_magnitude.png`](../../results/full_training_pipeline/figures/smape_by_magnitude.png)
 
 ## Verification
 
@@ -209,8 +209,8 @@ The experiment also saved explicit verification checks for parser dimensions, in
 
 Supporting outputs:
 
-- [`verification_checks.csv`](../results/full_training_pipeline/verification_checks.csv)
-- [`pca_scree.png`](../results/full_training_pipeline/figures/pca_scree.png)
-- [`parity_plot_log_space.png`](../results/full_training_pipeline/figures/parity_plot_log_space.png)
-- [`residual_hist_log_space.png`](../results/full_training_pipeline/figures/residual_hist_log_space.png)
+- [`verification_checks.csv`](../../results/full_training_pipeline/verification_checks.csv)
+- [`pca_scree.png`](../../results/full_training_pipeline/figures/pca_scree.png)
+- [`parity_plot_log_space.png`](../../results/full_training_pipeline/figures/parity_plot_log_space.png)
+- [`residual_hist_log_space.png`](../../results/full_training_pipeline/figures/residual_hist_log_space.png)
 

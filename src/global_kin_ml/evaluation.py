@@ -71,6 +71,7 @@ def compute_per_reaction_metrics(
     y_true_original: np.ndarray,
     y_pred_original: np.ndarray,
     reaction_map: pd.DataFrame,
+    target_column_field: str = "rate_const_column",
 ) -> pd.DataFrame:
     rows = []
     for column_index, reaction in reaction_map.iterrows():
@@ -85,7 +86,7 @@ def compute_per_reaction_metrics(
             {
                 "reaction_id": reaction["reaction_id"],
                 "reaction_label": reaction["reaction_label"],
-                "target_column": reaction["rate_const_column"],
+                "target_column": reaction[target_column_field],
                 "log_rmse": float(math.sqrt(mean_squared_error(true_log, pred_log))),
                 "log_mae": float(mean_absolute_error(true_log, pred_log)),
                 "log_r2": _safe_r2(true_log, pred_log),
@@ -165,8 +166,14 @@ def build_prediction_frame(
     y_pred_original: np.ndarray,
     y_true_log: np.ndarray,
     y_pred_log: np.ndarray,
+    target_column_field: str = "rate_const_column",
+    target_value_label: str = "rate_const",
 ) -> pd.DataFrame:
     rows = []
+    true_value_column = f"true_{target_value_label}"
+    predicted_value_column = f"predicted_{target_value_label}"
+    true_log_column = f"true_log10_{target_value_label}"
+    predicted_log_column = f"predicted_log10_{target_value_label}"
     for case_position, (_, case_row) in enumerate(case_ids.iterrows()):
         for reaction_index, reaction in reaction_map.iterrows():
             row = dict(case_row.to_dict())
@@ -174,43 +181,58 @@ def build_prediction_frame(
                 {
                     "reaction_id": reaction["reaction_id"],
                     "reaction_label": reaction["reaction_label"],
-                    "target_column": reaction["rate_const_column"],
-                    "true_rate_const": y_true_original[case_position, reaction_index],
-                    "predicted_rate_const": y_pred_original[case_position, reaction_index],
+                    "target_column": reaction[target_column_field],
+                    true_value_column: y_true_original[case_position, reaction_index],
+                    predicted_value_column: y_pred_original[case_position, reaction_index],
                     "absolute_error": abs(
                         y_pred_original[case_position, reaction_index]
                         - y_true_original[case_position, reaction_index]
                     ),
-                    "true_log10_rate": y_true_log[case_position, reaction_index],
-                    "predicted_log10_rate": y_pred_log[case_position, reaction_index],
+                    true_log_column: y_true_log[case_position, reaction_index],
+                    predicted_log_column: y_pred_log[case_position, reaction_index],
                     "absolute_log_error": abs(
                         y_pred_log[case_position, reaction_index]
                         - y_true_log[case_position, reaction_index]
                     ),
                 }
             )
+            if target_value_label == "rate_const":
+                row["true_rate_const"] = row[true_value_column]
+                row["predicted_rate_const"] = row[predicted_value_column]
+                row["true_log10_rate"] = row[true_log_column]
+                row["predicted_log10_rate"] = row[predicted_log_column]
             rows.append(row)
     return pd.DataFrame(rows)
 
 
-def build_relative_error_frame(prediction_frame: pd.DataFrame) -> pd.DataFrame:
+def build_relative_error_frame(
+    prediction_frame: pd.DataFrame,
+    target_value_label: str = "rate_const",
+) -> pd.DataFrame:
+    true_value_column = f"true_{target_value_label}"
+    predicted_value_column = f"predicted_{target_value_label}"
     relative_frame = prediction_frame.copy()
-    relative_frame["relative_error_defined"] = relative_frame["true_rate_const"] > 0.0
+    relative_frame["relative_error_defined"] = relative_frame[true_value_column] > 0.0
     relative_frame["relative_error_signed"] = np.where(
         relative_frame["relative_error_defined"],
         (
-            relative_frame["predicted_rate_const"] - relative_frame["true_rate_const"]
+            relative_frame[predicted_value_column] - relative_frame[true_value_column]
         )
-        / relative_frame["true_rate_const"],
+        / relative_frame[true_value_column],
         np.nan,
     )
     relative_frame["relative_error_abs"] = relative_frame["relative_error_signed"].abs()
     return relative_frame
 
 
-def build_smape_frame(prediction_frame: pd.DataFrame) -> pd.DataFrame:
+def build_smape_frame(
+    prediction_frame: pd.DataFrame,
+    target_value_label: str = "rate_const",
+) -> pd.DataFrame:
+    true_value_column = f"true_{target_value_label}"
+    predicted_value_column = f"predicted_{target_value_label}"
     smape_frame = prediction_frame.copy()
-    denominator = smape_frame["true_rate_const"].abs() + smape_frame["predicted_rate_const"].abs()
+    denominator = smape_frame[true_value_column].abs() + smape_frame[predicted_value_column].abs()
     smape_frame["smape_defined"] = denominator > 0.0
     smape_frame["smape"] = np.where(
         smape_frame["smape_defined"],
@@ -297,16 +319,21 @@ def _smape_summary(values: pd.Series) -> dict[str, float]:
 
 def compute_relative_error_outputs(
     prediction_frame: pd.DataFrame,
+    target_value_label: str = "rate_const",
 ) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame]:
-    relative_frame = build_relative_error_frame(prediction_frame)
+    true_value_column = f"true_{target_value_label}"
+    relative_frame = build_relative_error_frame(prediction_frame, target_value_label=target_value_label)
     defined = relative_frame[relative_frame["relative_error_defined"]].copy()
 
     overall_row = {
         "total_prediction_count": int(len(relative_frame)),
         "positive_groundtruth_count": int(len(defined)),
         "zero_groundtruth_count": int((~relative_frame["relative_error_defined"]).sum()),
-        "relative_error_definition": "(predicted_rate_const - true_rate_const) / true_rate_const for true_rate_const > 0",
-        "zero_groundtruth_policy": "relative error undefined when true_rate_const == 0",
+        "relative_error_definition": (
+            f"(predicted_{target_value_label} - true_{target_value_label}) / true_{target_value_label} "
+            f"for true_{target_value_label} > 0"
+        ),
+        "zero_groundtruth_policy": f"relative error undefined when true_{target_value_label} == 0",
         **_relative_error_summary(defined["relative_error_signed"]),
     }
     overall = pd.DataFrame([overall_row])
@@ -360,7 +387,7 @@ def compute_relative_error_outputs(
     magnitude_rows = []
     for lower, upper in magnitude_bins:
         subset = defined[
-            (defined["true_rate_const"] >= lower) & (defined["true_rate_const"] < upper)
+            (defined[true_value_column] >= lower) & (defined[true_value_column] < upper)
         ]
         if subset.empty:
             continue
@@ -378,12 +405,17 @@ def compute_relative_error_outputs(
 
 def compute_smape_outputs(
     prediction_frame: pd.DataFrame,
+    target_value_label: str = "rate_const",
 ) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame]:
-    smape_frame = build_smape_frame(prediction_frame)
+    true_value_column = f"true_{target_value_label}"
+    smape_frame = build_smape_frame(prediction_frame, target_value_label=target_value_label)
 
     overall_row = {
         "total_prediction_count": int(len(smape_frame)),
-        "smape_definition": "2 * abs(predicted_rate_const - true_rate_const) / (abs(predicted_rate_const) + abs(true_rate_const))",
+        "smape_definition": (
+            f"2 * abs(predicted_{target_value_label} - true_{target_value_label}) / "
+            f"(abs(predicted_{target_value_label}) + abs(true_{target_value_label}))"
+        ),
         "smape_range": "[0, 2], where 0 is perfect and 2 is the maximum disagreement",
         **_smape_summary(smape_frame["smape"]),
     }
@@ -432,8 +464,8 @@ def compute_smape_outputs(
     magnitude_rows = []
     for lower, upper in magnitude_bins:
         subset = smape_frame[
-            (smape_frame["true_rate_const"] >= lower)
-            & (smape_frame["true_rate_const"] < upper)
+            (smape_frame[true_value_column] >= lower)
+            & (smape_frame[true_value_column] < upper)
         ]
         if subset.empty:
             continue

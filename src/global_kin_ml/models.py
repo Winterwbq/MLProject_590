@@ -7,7 +7,12 @@ import warnings
 import numpy as np
 import torch
 from sklearn.decomposition import PCA
-from sklearn.ensemble import ExtraTreesRegressor, RandomForestRegressor
+from sklearn.ensemble import (
+    ExtraTreesClassifier,
+    ExtraTreesRegressor,
+    RandomForestClassifier,
+    RandomForestRegressor,
+)
 from sklearn.linear_model import Ridge
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
@@ -222,6 +227,65 @@ class LatentPCAModel(ExperimentModel):
             return self.pca_.inverse_transform(latent_predictions)
 
 
+class TwoStageSparseTreeModel(ExperimentModel):
+    def __init__(
+        self,
+        tree_family: str,
+        n_estimators: int,
+        max_depth: int | None,
+        min_samples_leaf: int,
+    ) -> None:
+        classifier_cls = ExtraTreesClassifier if tree_family == "extra_trees" else RandomForestClassifier
+        regressor_cls = ExtraTreesRegressor if tree_family == "extra_trees" else RandomForestRegressor
+        self.classifier = classifier_cls(
+            n_estimators=n_estimators,
+            max_depth=max_depth,
+            min_samples_leaf=min_samples_leaf,
+            random_state=RANDOM_STATE,
+            n_jobs=-1,
+        )
+        self.regressor = regressor_cls(
+            n_estimators=n_estimators,
+            max_depth=max_depth,
+            min_samples_leaf=min_samples_leaf,
+            random_state=RANDOM_STATE,
+            n_jobs=-1,
+        )
+        self.zero_log_values_: np.ndarray | None = None
+        self.always_active_mask_: np.ndarray | None = None
+        self.variable_activity_indices_: np.ndarray | None = None
+
+    def fit(self, x_train, y_train, x_val=None, y_val=None, validation_score_callback=None):
+        y_train = np.asarray(y_train, dtype=float)
+        self.zero_log_values_ = np.min(y_train, axis=0)
+        active_targets = y_train > (self.zero_log_values_[None, :] + 1e-12)
+        self.always_active_mask_ = np.all(active_targets, axis=0)
+        self.variable_activity_indices_ = np.where(~self.always_active_mask_)[0]
+
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", RuntimeWarning)
+            self.regressor.fit(x_train, y_train)
+            if self.variable_activity_indices_.size > 0:
+                self.classifier.fit(x_train, active_targets[:, self.variable_activity_indices_])
+        return self
+
+    def predict(self, x):
+        if (
+            self.zero_log_values_ is None
+            or self.always_active_mask_ is None
+            or self.variable_activity_indices_ is None
+        ):
+            raise RuntimeError("Model must be fit before prediction.")
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", RuntimeWarning)
+            predicted_log = np.asarray(self.regressor.predict(x), dtype=float)
+        predicted_active = np.ones_like(predicted_log, dtype=bool)
+        if self.variable_activity_indices_.size > 0:
+            variable_pred = np.asarray(self.classifier.predict(x), dtype=bool)
+            predicted_active[:, self.variable_activity_indices_] = variable_pred
+        return np.where(predicted_active, predicted_log, self.zero_log_values_[None, :])
+
+
 def build_model(config: ModelConfig) -> ExperimentModel:
     family = config.model_family
     params = config.hyperparameters
@@ -251,6 +315,20 @@ def build_model(config: ModelConfig) -> ExperimentModel:
             n_jobs=-1,
         )
         model = DirectSklearnModel(estimator)
+    elif family == "two_stage_extra_trees":
+        model = TwoStageSparseTreeModel(
+            tree_family="extra_trees",
+            n_estimators=int(params["n_estimators"]),
+            max_depth=None if params["max_depth"] is None else int(params["max_depth"]),
+            min_samples_leaf=int(params["min_samples_leaf"]),
+        )
+    elif family == "two_stage_random_forest":
+        model = TwoStageSparseTreeModel(
+            tree_family="random_forest",
+            n_estimators=int(params["n_estimators"]),
+            max_depth=None if params["max_depth"] is None else int(params["max_depth"]),
+            min_samples_leaf=int(params["min_samples_leaf"]),
+        )
     elif family == "mlp":
         model = DirectMLPModel(
             hidden_width=int(params["hidden_width"]),

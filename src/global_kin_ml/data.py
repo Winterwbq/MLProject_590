@@ -52,19 +52,21 @@ def _load_legacy_parser_module() -> ModuleType:
 
 
 def _power_metadata_from_path(raw_path: Path) -> dict[str, object]:
-    match = re.search(r"(\d+(?:\.\d+)?)mJ", raw_path.name, flags=re.IGNORECASE)
+    match = re.search(r"(\d+(?:[p\.]\d+)?)mJ", raw_path.name, flags=re.IGNORECASE)
     if not match:
         raise ValueError(f"Could not determine power from filename: {raw_path.name}")
-    power_mj = float(match.group(1))
+    power_token = match.group(1).replace("p", ".").replace("P", ".")
+    power_mj = float(power_token)
+    power_label = f"{power_mj:g}mJ"
     return {
         "source_file": raw_path.name,
-        "power_label": f"{match.group(1)}mJ",
+        "power_label": power_label,
         "power_mj": power_mj,
     }
 
 
 def _merge_cases_from_directory(module: ModuleType, raw_dir: Path) -> tuple[list[object], dict[str, object], pd.DataFrame]:
-    raw_files = sorted(raw_dir.glob("*.out"))
+    raw_files = sorted(raw_dir.glob("*.out"), key=lambda path: _power_metadata_from_path(path)["power_mj"])
     if not raw_files:
         raise FileNotFoundError(f"No .out files found in {raw_dir}")
 

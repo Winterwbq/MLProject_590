@@ -16,10 +16,10 @@ The advanced dataset analysis showed three properties that directly shape the tr
 
 Primary supporting analysis outputs:
 
-- [`feature_set_comparison.csv`](../outputs/advanced_analysis/feature_set_comparison.csv)
-- [`baseline_random_split_metrics.csv`](../outputs/advanced_analysis/baseline_random_split_metrics.csv)
-- [`split_strategy_metrics.csv`](../outputs/advanced_analysis/split_strategy_metrics.csv)
-- [`low_rank_summary.csv`](../outputs/advanced_analysis/low_rank_summary.csv)
+- [`feature_set_comparison.csv`](../../outputs/advanced_analysis/feature_set_comparison.csv)
+- [`baseline_random_split_metrics.csv`](../../outputs/advanced_analysis/baseline_random_split_metrics.csv)
+- [`split_strategy_metrics.csv`](../../outputs/advanced_analysis/split_strategy_metrics.csv)
+- [`low_rank_summary.csv`](../../outputs/advanced_analysis/low_rank_summary.csv)
 
 Because of that, the training pipeline evaluates two model families:
 
@@ -34,7 +34,7 @@ Earlier analysis already showed that raw `E/N` is a poor representation for this
 
 Supporting output:
 
-- [`feature_set_comparison.csv`](../outputs/advanced_analysis/feature_set_comparison.csv)
+- [`feature_set_comparison.csv`](../../outputs/advanced_analysis/feature_set_comparison.csv)
 
 That file showed that the same baseline model performs dramatically worse with raw `E/N` than with `log10(E/N)`. The end-to-end training pipeline therefore treats `log10(E/N)` as the standard representation for every feature set.
 

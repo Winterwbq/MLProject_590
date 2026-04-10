@@ -36,13 +36,15 @@ from .evaluation import (
 )
 from .models import ModelConfig, build_model, build_model_configs
 from .preprocessing import (
-    TARGET_PREFIX,
+    TargetSpec,
     TargetTransformer,
     build_feature_transformer,
     build_split_assignment_frame,
     create_group_holdout_splits,
     create_random_case_splits,
+    filter_constant_target_columns,
     get_case_metadata_columns,
+    get_target_spec,
 )
 from .reporting import export_experiment_report
 
@@ -198,6 +200,7 @@ def _save_feature_snapshots(
     trainval_indices: np.ndarray,
     target_columns: list[str],
     data_snapshot_dir: Path,
+    target_stem: str,
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
     trainval_inputs = inputs.loc[trainval_indices]
     metadata_columns = get_case_metadata_columns(inputs)
@@ -235,10 +238,66 @@ def _save_feature_snapshots(
         ],
         axis=1,
     )
-    save_csv(transformed_targets, data_snapshot_dir / "log_transformed_targets_all_cases.csv")
+    save_csv(transformed_targets, data_snapshot_dir / f"log_transformed_{target_stem}_all_cases.csv")
     epsilon_frame = target_transformer.epsilon_frame()
-    save_csv(epsilon_frame, data_snapshot_dir / "target_epsilons_trainval.csv")
+    save_csv(epsilon_frame, data_snapshot_dir / f"{target_stem}_epsilons_trainval.csv")
     return pd.DataFrame(feature_metadata_rows), epsilon_frame
+
+
+def _build_target_frame(
+    dataset,
+    inputs: pd.DataFrame,
+    target_spec: TargetSpec,
+) -> tuple[pd.DataFrame, pd.DataFrame]:
+    metadata_columns = get_case_metadata_columns(inputs)
+    reaction_map = dataset.reaction_map[
+        ["reaction_id", "reaction_label", target_spec.reaction_map_column]
+    ].copy()
+    ordered_target_columns = reaction_map[target_spec.reaction_map_column].tolist()
+
+    if target_spec.name == "rate_const":
+        target_frame = inputs[metadata_columns].merge(
+            dataset.training_targets[metadata_columns + ordered_target_columns],
+            on=metadata_columns,
+            how="left",
+        )
+        return target_frame, reaction_map
+
+    long_frame = dataset.rate_constants_long[
+        metadata_columns + ["reaction_id", target_spec.long_value_column]
+    ].copy()
+    wide = (
+        long_frame.pivot_table(
+            index=metadata_columns,
+            columns="reaction_id",
+            values=target_spec.long_value_column,
+            aggfunc="first",
+        )
+        .reset_index()
+    )
+    rename_map = dict(zip(reaction_map["reaction_id"], reaction_map[target_spec.reaction_map_column]))
+    wide = wide.rename(columns=rename_map)
+    for column in ordered_target_columns:
+        if column not in wide.columns:
+            wide[column] = 0.0
+    target_frame = inputs[metadata_columns].merge(
+        wide[metadata_columns + ordered_target_columns],
+        on=metadata_columns,
+        how="left",
+    )
+    return target_frame, reaction_map
+
+
+def _expand_target_matrix(
+    active_matrix: np.ndarray,
+    kept_target_columns: list[str],
+    full_target_columns: list[str],
+) -> np.ndarray:
+    expanded = np.zeros((active_matrix.shape[0], len(full_target_columns)), dtype=float)
+    column_to_index = {column: index for index, column in enumerate(full_target_columns)}
+    for active_index, column in enumerate(kept_target_columns):
+        expanded[:, column_to_index[column]] = active_matrix[:, active_index]
+    return expanded
 
 
 def _oracle_frames_for_eval(
@@ -249,6 +308,7 @@ def _oracle_frames_for_eval(
     reaction_map: pd.DataFrame,
     target_transformer: TargetTransformer,
     prefix: str,
+    target_column_field: str,
 ) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     overall_rows = []
     per_reaction_rows = []
@@ -274,6 +334,7 @@ def _oracle_frames_for_eval(
             y_true_original=y_eval_original,
             y_pred_original=reconstructed_original,
             reaction_map=reaction_map,
+            target_column_field=target_column_field,
         )
         per_reaction.insert(0, "latent_k", latent_k)
         per_reaction_rows.append(per_reaction)
@@ -318,6 +379,8 @@ def run_training_experiment(
     split_strategy: str = "random_case",
     holdout_power_labels: list[str] | None = None,
     configs: list[ModelConfig] | None = None,
+    target_name: str = "rate_const",
+    drop_constant_targets: bool = False,
 ) -> dict[str, Path]:
     results_dir.mkdir(parents=True, exist_ok=True)
     output_dirs = {name: results_dir / subdir for name, subdir in RESULT_SUBDIRS.items()}
@@ -340,9 +403,8 @@ def run_training_experiment(
     )
 
     inputs = dataset.training_inputs.copy()
-    targets = dataset.training_targets.copy()
-    reaction_map = dataset.reaction_map.copy()
-    target_columns = [column for column in targets.columns if column.startswith(TARGET_PREFIX)]
+    target_spec = get_target_spec(target_name)
+    full_targets, full_reaction_map = _build_target_frame(dataset, inputs, target_spec)
     metadata_columns = get_case_metadata_columns(inputs)
 
     if split_strategy == "random_case":
@@ -373,6 +435,8 @@ def run_training_experiment(
             "trainval_case_count": len(splits.trainval_indices),
             "test_case_count": len(splits.test_indices),
             "holdout_power_labels": "|".join(holdout_power_labels or []),
+            "target_name": target_spec.name,
+            "target_display_name": target_spec.display_name,
         }
     ]
     for fold in splits.validation_folds:
@@ -386,6 +450,54 @@ def run_training_experiment(
         )
     save_csv(pd.DataFrame(split_metadata_rows), output_dirs["tuning"] / "split_metadata.csv")
 
+    full_target_columns = [column for column in full_targets.columns if column.startswith(target_spec.prefix)]
+    kept_target_columns = list(full_target_columns)
+    dropped_target_columns: list[str] = []
+    if drop_constant_targets:
+        kept_target_columns, dropped_target_columns = filter_constant_target_columns(
+            full_targets.loc[splits.trainval_indices],
+            full_target_columns,
+        )
+    targets = full_targets[metadata_columns + kept_target_columns].copy()
+    reaction_map = full_reaction_map[
+        full_reaction_map[target_spec.reaction_map_column].isin(kept_target_columns)
+    ].copy()
+    reaction_map["_target_order"] = reaction_map[target_spec.reaction_map_column].map(
+        {column: index for index, column in enumerate(kept_target_columns)}
+    )
+    reaction_map = reaction_map.sort_values("_target_order").drop(columns="_target_order").reset_index(drop=True)
+    target_columns = kept_target_columns
+
+    target_cleaning_rows = []
+    for _, reaction_row in full_reaction_map.iterrows():
+        target_column = reaction_row[target_spec.reaction_map_column]
+        target_cleaning_rows.append(
+            {
+                "reaction_id": reaction_row["reaction_id"],
+                "reaction_label": reaction_row["reaction_label"],
+                "target_column": target_column,
+                "target_name": target_spec.name,
+                "kept_for_training": target_column in kept_target_columns,
+                "dropped_as_constant": target_column in dropped_target_columns,
+            }
+        )
+    save_csv(pd.DataFrame(target_cleaning_rows), output_dirs["data_snapshots"] / "target_cleaning_map.csv")
+    save_csv(
+        pd.DataFrame(
+            [
+                {
+                    "target_name": target_spec.name,
+                    "target_display_name": target_spec.display_name,
+                    "full_target_count": len(full_target_columns),
+                    "kept_target_count": len(kept_target_columns),
+                    "dropped_target_count": len(dropped_target_columns),
+                    "drop_constant_targets": bool(drop_constant_targets),
+                }
+            ]
+        ),
+        output_dirs["data_snapshots"] / "target_metadata.csv",
+    )
+
     feature_metadata, epsilon_frame = _save_feature_snapshots(
         inputs=inputs,
         targets=targets,
@@ -393,6 +505,7 @@ def run_training_experiment(
         trainval_indices=splits.trainval_indices,
         target_columns=target_columns,
         data_snapshot_dir=output_dirs["data_snapshots"],
+        target_stem=target_spec.name,
     )
     save_csv(feature_metadata, output_dirs["data_snapshots"] / "feature_set_final_metadata.csv")
 
@@ -455,6 +568,7 @@ def run_training_experiment(
             reaction_map=reaction_map,
             target_transformer=target_transformer,
             prefix=f"fold_{fold.fold_id}_validation",
+            target_column_field=target_spec.reaction_map_column,
         )
         oracle_overall.insert(0, "fold_id", fold.fold_id)
         oracle_per_reaction.insert(0, "fold_id", fold.fold_id)
@@ -520,6 +634,7 @@ def run_training_experiment(
                     y_true_original=y_val_original,
                     y_pred_original=y_val_original_pred,
                     reaction_map=reaction_map,
+                    target_column_field=target_spec.reaction_map_column,
                 )
                 row.update(_prefixed_metric_row("validation", metrics))
                 row["validation_mean_reaction_log_r2"] = float(
@@ -598,6 +713,7 @@ def run_training_experiment(
         reaction_map=reaction_map,
         target_transformer=final_target_transformer,
         prefix="locked_test",
+        target_column_field=target_spec.reaction_map_column,
     )
     save_csv(oracle_test_overall, output_dirs["pca"] / "oracle_test_overall_by_k.csv")
     save_csv(oracle_test_per_reaction, output_dirs["pca"] / "oracle_test_per_reaction_by_k.csv")
@@ -615,46 +731,101 @@ def run_training_experiment(
     y_test_log_pred = final_model.predict(x_test)
     y_test_original_pred = final_target_transformer.inverse_transform_array(y_test_log_pred)
 
-    overall_metrics = compute_overall_metrics(
+    active_overall_metrics = compute_overall_metrics(
         y_true_log=y_test_log,
         y_pred_log=y_test_log_pred,
         y_true_original=y_test_original,
         y_pred_original=y_test_original_pred,
     )
-    per_reaction_metrics = compute_per_reaction_metrics(
+    active_per_reaction_metrics = compute_per_reaction_metrics(
         y_true_log=y_test_log,
         y_pred_log=y_test_log_pred,
         y_true_original=y_test_original,
         y_pred_original=y_test_original_pred,
         reaction_map=reaction_map,
+        target_column_field=target_spec.reaction_map_column,
     )
-    per_case_metrics = compute_per_case_metrics(
+    active_per_case_metrics = compute_per_case_metrics(
         y_true_log=y_test_log,
         y_pred_log=y_test_log_pred,
         y_true_original=y_test_original,
         y_pred_original=y_test_original_pred,
+        case_ids=test_targets[metadata_columns],
+    )
+    active_prediction_frame = build_prediction_frame(
+        case_ids=test_targets[metadata_columns],
+        reaction_map=reaction_map,
+        y_true_original=y_test_original,
+        y_pred_original=y_test_original_pred,
+        y_true_log=y_test_log,
+        y_pred_log=y_test_log_pred,
+        target_column_field=target_spec.reaction_map_column,
+        target_value_label=target_spec.name,
+    )
+
+    full_target_transformer = TargetTransformer(full_target_columns).fit(
+        full_targets.loc[splits.trainval_indices]
+    )
+    y_test_full_original = full_targets.loc[splits.test_indices, full_target_columns].to_numpy(dtype=float)
+    y_test_full_original_pred = _expand_target_matrix(
+        y_test_original_pred,
+        kept_target_columns=kept_target_columns,
+        full_target_columns=full_target_columns,
+    )
+    y_test_full_log = full_target_transformer.transform_array(y_test_full_original)
+    y_test_full_log_pred = full_target_transformer.transform_array(y_test_full_original_pred)
+    full_overall_metrics = compute_overall_metrics(
+        y_true_log=y_test_full_log,
+        y_pred_log=y_test_full_log_pred,
+        y_true_original=y_test_full_original,
+        y_pred_original=y_test_full_original_pred,
+    )
+    full_per_reaction_metrics = compute_per_reaction_metrics(
+        y_true_log=y_test_full_log,
+        y_pred_log=y_test_full_log_pred,
+        y_true_original=y_test_full_original,
+        y_pred_original=y_test_full_original_pred,
+        reaction_map=full_reaction_map,
+        target_column_field=target_spec.reaction_map_column,
+    )
+    full_per_case_metrics = compute_per_case_metrics(
+        y_true_log=y_test_full_log,
+        y_pred_log=y_test_full_log_pred,
+        y_true_original=y_test_full_original,
+        y_pred_original=y_test_full_original_pred,
         case_ids=test_targets[metadata_columns],
     )
     prediction_frame = build_prediction_frame(
         case_ids=test_targets[metadata_columns],
-        reaction_map=reaction_map,
-        y_true_original=y_test_original,
-        y_pred_original=y_test_original_pred,
-        y_true_log=y_test_log,
-        y_pred_log=y_test_log_pred,
+        reaction_map=full_reaction_map,
+        y_true_original=y_test_full_original,
+        y_pred_original=y_test_full_original_pred,
+        y_true_log=y_test_full_log,
+        y_pred_log=y_test_full_log_pred,
+        target_column_field=target_spec.reaction_map_column,
+        target_value_label=target_spec.name,
     )
     relative_error_overall, relative_error_per_reaction, relative_error_per_case, relative_error_by_magnitude = (
-        compute_relative_error_outputs(prediction_frame)
+        compute_relative_error_outputs(prediction_frame, target_value_label=target_spec.name)
     )
-    relative_error_frame = build_relative_error_frame(prediction_frame)
+    relative_error_frame = build_relative_error_frame(prediction_frame, target_value_label=target_spec.name)
     smape_overall, smape_per_reaction, smape_per_case, smape_by_magnitude = compute_smape_outputs(
-        prediction_frame
+        prediction_frame,
+        target_value_label=target_spec.name,
     )
-    smape_frame = build_smape_frame(prediction_frame)
+    smape_frame = build_smape_frame(prediction_frame, target_value_label=target_spec.name)
 
-    save_csv(pd.DataFrame([overall_metrics]), output_dirs["evaluation"] / "test_overall_metrics.csv")
-    save_csv(per_reaction_metrics, output_dirs["evaluation"] / "test_per_reaction_metrics.csv")
-    save_csv(per_case_metrics, output_dirs["evaluation"] / "test_per_case_metrics.csv")
+    save_csv(pd.DataFrame([active_overall_metrics]), output_dirs["evaluation"] / "test_overall_metrics_active_targets.csv")
+    save_csv(active_per_reaction_metrics, output_dirs["evaluation"] / "test_per_reaction_metrics_active_targets.csv")
+    save_csv(active_per_case_metrics, output_dirs["evaluation"] / "test_per_case_metrics_active_targets.csv")
+    save_csv(active_prediction_frame, output_dirs["evaluation"] / "test_predictions_long_active_targets.csv")
+    save_csv(pd.DataFrame([full_overall_metrics]), output_dirs["evaluation"] / "test_overall_metrics_full_reconstructed.csv")
+    save_csv(full_per_reaction_metrics, output_dirs["evaluation"] / "test_per_reaction_metrics_full_reconstructed.csv")
+    save_csv(full_per_case_metrics, output_dirs["evaluation"] / "test_per_case_metrics_full_reconstructed.csv")
+    save_csv(prediction_frame, output_dirs["evaluation"] / "test_predictions_long_full_reconstructed.csv")
+    save_csv(pd.DataFrame([full_overall_metrics]), output_dirs["evaluation"] / "test_overall_metrics.csv")
+    save_csv(full_per_reaction_metrics, output_dirs["evaluation"] / "test_per_reaction_metrics.csv")
+    save_csv(full_per_case_metrics, output_dirs["evaluation"] / "test_per_case_metrics.csv")
     save_csv(prediction_frame, output_dirs["evaluation"] / "test_predictions_long.csv")
     save_csv(relative_error_overall, output_dirs["evaluation"] / "test_relative_error_overall_summary.csv")
     save_csv(relative_error_per_reaction, output_dirs["evaluation"] / "test_relative_error_per_reaction.csv")
@@ -665,11 +836,11 @@ def run_training_experiment(
     save_csv(smape_per_case, output_dirs["evaluation"] / "test_smape_per_case.csv")
     save_csv(smape_by_magnitude, output_dirs["evaluation"] / "test_smape_by_magnitude_bin.csv")
     save_csv(
-        per_reaction_metrics.nlargest(10, "log_rmse"),
+        full_per_reaction_metrics.nlargest(10, "log_rmse"),
         output_dirs["evaluation"] / "worst_10_reactions.csv",
     )
     save_csv(
-        per_case_metrics.nlargest(10, "log_rmse"),
+        full_per_case_metrics.nlargest(10, "log_rmse"),
         output_dirs["evaluation"] / "worst_10_cases.csv",
     )
     save_csv(
@@ -705,24 +876,24 @@ def run_training_experiment(
     plot_oracle_error(oracle_test_overall, output_dirs["figures"] / "oracle_reconstruction_error_by_k.png")
     plot_model_leaderboard(summary, output_dirs["figures"] / "model_leaderboard.png")
     plot_parity(
-        y_true=y_test_log,
-        y_pred=y_test_log_pred,
+        y_true=y_test_full_log,
+        y_pred=y_test_full_log_pred,
         path=output_dirs["figures"] / "parity_plot_log_space.png",
-        title="Predicted vs True Log10 Rate Constants",
-        x_label="True log10(rate + epsilon)",
-        y_label="Predicted log10(rate + epsilon)",
+        title=f"Predicted vs True Log10 {target_spec.display_name}",
+        x_label=f"True log10({target_spec.singular_label} + epsilon)",
+        y_label=f"Predicted log10({target_spec.singular_label} + epsilon)",
     )
     plot_parity(
-        y_true=np.log10(np.maximum(y_test_original, 1e-300)),
-        y_pred=np.log10(np.maximum(y_test_original_pred, 1e-300)),
+        y_true=np.log10(np.maximum(y_test_full_original, 1e-300)),
+        y_pred=np.log10(np.maximum(y_test_full_original_pred, 1e-300)),
         path=output_dirs["figures"] / "parity_plot_original_space.png",
-        title="Predicted vs True Rate Constants (Log10 View)",
-        x_label="True log10(rate_const)",
-        y_label="Predicted log10(rate_const)",
+        title=f"Predicted vs True {target_spec.display_name} (Log10 View)",
+        x_label=f"True log10({target_spec.name})",
+        y_label=f"Predicted log10({target_spec.name})",
     )
     plot_log_residual_histogram(prediction_frame, output_dirs["figures"] / "residual_hist_log_space.png")
-    plot_worst_reactions(per_reaction_metrics, output_dirs["figures"] / "worst_reactions_log_rmse.png")
-    plot_case_error_distribution(per_case_metrics, output_dirs["figures"] / "per_case_log_rmse_distribution.png")
+    plot_worst_reactions(full_per_reaction_metrics, output_dirs["figures"] / "worst_reactions_log_rmse.png")
+    plot_case_error_distribution(full_per_case_metrics, output_dirs["figures"] / "per_case_log_rmse_distribution.png")
     plot_relative_error_histogram(
         relative_error_overall,
         relative_error_frame,

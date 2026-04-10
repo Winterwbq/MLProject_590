@@ -1,16 +1,16 @@
 # NERS590 v02 Experiment Plan
 
-This document records the plan for migrating the project from the abandoned single-file dataset to the new multi-file dataset under [`NERS590_data_v02`](../NERS590_data_v02).
+This document records the plan for migrating the project from the abandoned single-file dataset to the new multi-file dataset under [`NERS590_data_v02`](../../NERS590_data_v02).
 
 ## Dataset Scope
 
 The new dataset consists of five `.out` files:
 
-- [`global_kin_boltz_1mJ.out`](../NERS590_data_v02/global_kin_boltz_1mJ.out)
-- [`global_kin_boltz_2mJ.out`](../NERS590_data_v02/global_kin_boltz_2mJ.out)
-- [`global_kin_boltz_3mJ.out`](../NERS590_data_v02/global_kin_boltz_3mJ.out)
-- [`global_kin_boltz_4mJ.out`](../NERS590_data_v02/global_kin_boltz_4mJ.out)
-- [`global_kin_boltz_5mJ.out`](../NERS590_data_v02/global_kin_boltz_5mJ.out)
+- [`global_kin_boltz_1mJ.out`](../../NERS590_data_v02/global_kin_boltz_1mJ.out)
+- [`global_kin_boltz_2mJ.out`](../../NERS590_data_v02/global_kin_boltz_2mJ.out)
+- [`global_kin_boltz_3mJ.out`](../../NERS590_data_v02/global_kin_boltz_3mJ.out)
+- [`global_kin_boltz_4mJ.out`](../../NERS590_data_v02/global_kin_boltz_4mJ.out)
+- [`global_kin_boltz_5mJ.out`](../../NERS590_data_v02/global_kin_boltz_5mJ.out)
 
 Initial inspection shows:
 
@@ -36,7 +36,7 @@ The parser should be extended from a single-file workflow to a directory-based w
 
 Planned parser behavior:
 
-- iterate through all `.out` files in [`NERS590_data_v02`](../NERS590_data_v02)
+- iterate through all `.out` files in [`NERS590_data_v02`](../../NERS590_data_v02)
 - parse each file using the existing case-block logic
 - extract `power_mj` from the filename
 - assign dataset-global IDs across the merged dataset
@@ -163,8 +163,8 @@ Evaluation outputs should continue to include:
 
 Planned code changes:
 
-- extend [`src/global_kin_ml/data.py`](../src/global_kin_ml/data.py) for directory-based parsing and generalized dataset validation
-- extend [`src/global_kin_ml/preprocessing.py`](../src/global_kin_ml/preprocessing.py) with power-aware feature transformers and more flexible metadata handling
+- extend [`src/global_kin_ml/data.py`](../../src/global_kin_ml/data.py) for directory-based parsing and generalized dataset validation
+- extend [`src/global_kin_ml/preprocessing.py`](../../src/global_kin_ml/preprocessing.py) with power-aware feature transformers and more flexible metadata handling
 - extend the training pipeline so it can run on the merged dataset and optionally use different split strategies
 - add new v02-specific CLI scripts for parsing, analysis, plotting, and training
 - add new v02 Markdown reports under [`docs`](./)

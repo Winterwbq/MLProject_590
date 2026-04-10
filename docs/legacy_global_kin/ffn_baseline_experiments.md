@@ -21,9 +21,9 @@ Shared protocol:
 
 Primary outputs:
 
-- [`ffn_baseline_comparison_summary.csv`](../results/ffn_baselines/ffn_baseline_comparison_summary.csv)
-- [`direct_all_inputs_end_to_end/test_overall_metrics.csv`](../results/ffn_baselines/direct_all_inputs_end_to_end/evaluation/test_overall_metrics.csv)
-- [`rf_replacement_composition_pca/test_overall_metrics.csv`](../results/ffn_baselines/rf_replacement_composition_pca/evaluation/test_overall_metrics.csv)
-- [`direct_all_inputs_end_to_end/test_relative_error_overall_summary.csv`](../results/ffn_baselines/direct_all_inputs_end_to_end/evaluation/test_relative_error_overall_summary.csv)
-- [`rf_replacement_composition_pca/test_relative_error_overall_summary.csv`](../results/ffn_baselines/rf_replacement_composition_pca/evaluation/test_relative_error_overall_summary.csv)
+- [`ffn_baseline_comparison_summary.csv`](../../results/ffn_baselines/ffn_baseline_comparison_summary.csv)
+- [`direct_all_inputs_end_to_end/test_overall_metrics.csv`](../../results/ffn_baselines/direct_all_inputs_end_to_end/evaluation/test_overall_metrics.csv)
+- [`rf_replacement_composition_pca/test_overall_metrics.csv`](../../results/ffn_baselines/rf_replacement_composition_pca/evaluation/test_overall_metrics.csv)
+- [`direct_all_inputs_end_to_end/test_relative_error_overall_summary.csv`](../../results/ffn_baselines/direct_all_inputs_end_to_end/evaluation/test_relative_error_overall_summary.csv)
+- [`rf_replacement_composition_pca/test_relative_error_overall_summary.csv`](../../results/ffn_baselines/rf_replacement_composition_pca/evaluation/test_relative_error_overall_summary.csv)
 
