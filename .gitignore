@@ -12,6 +12,12 @@ node_modules
 dist
 build
 coverage
+project/results/ners590_v03_multitask
 
 __pycache__
 .pytest_cache
+
+# Large generated experiment artifacts.
+results/ners590_v03_multitask/
+results/**/evaluation/*predictions_long*.csv
+results/**/evaluation/*_test_predictions_long*.csv

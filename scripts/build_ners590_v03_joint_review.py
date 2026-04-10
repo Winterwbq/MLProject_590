@@ -26,6 +26,12 @@ def main() -> None:
         help="Canonical v03 SUPER RATE results root.",
     )
     parser.add_argument(
+        "--multitask-results-root",
+        type=Path,
+        default=REPO_ROOT / "results" / "ners590_v03_multitask",
+        help="Canonical v03 multitask results root.",
+    )
+    parser.add_argument(
         "--holdout-suffix",
         type=str,
         default="10mJ",
@@ -47,11 +53,13 @@ def main() -> None:
 
     cmd = [
         sys.executable,
-        "scripts/build_ners590_joint_experiment_report_assets.py",
+        "scripts/build_ners590_v03_joint_review_assets.py",
         "--rate-results-root",
         str(args.rate_results_root),
         "--super-rate-results-root",
         str(args.super_rate_results_root),
+        "--multitask-results-root",
+        str(args.multitask_results_root),
         "--holdout-suffix",
         args.holdout_suffix,
         "--holdout-display-label",
