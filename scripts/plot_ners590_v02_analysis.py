@@ -18,6 +18,18 @@ def save(fig: plt.Figure, path: Path) -> None:
     plt.close(fig)
 
 
+def normalize_v03_dir(path: Path, leaf_name: str) -> Path:
+    if path.parent.name == "ners590_v03":
+        canonical = path.parent.parent / "ners590_v03_analysis" / leaf_name
+        print(
+            "[plot-runner] remapping ambiguous v03 path | "
+            f"requested={path} -> canonical={canonical}",
+            flush=True,
+        )
+        return canonical
+    return path
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         description="Create summary figures for the NERS590 v02 analysis outputs."
@@ -35,6 +47,8 @@ def main() -> None:
         help="Directory for figure outputs.",
     )
     args = parser.parse_args()
+    args.analysis_dir = normalize_v03_dir(args.analysis_dir, "analysis")
+    args.output_dir = normalize_v03_dir(args.output_dir, "figures")
 
     sns.set_theme(style="whitegrid")
     args.output_dir.mkdir(parents=True, exist_ok=True)

@@ -13,6 +13,18 @@ if str(SRC_DIR) not in sys.path:
 from global_kin_ml.data import parse_raw_dataset
 
 
+def normalize_output_dir(raw_dir: Path, output_dir: Path) -> Path:
+    if raw_dir.name == "NERS590_data_V03" and output_dir.parent.name == "ners590_v03":
+        canonical = output_dir.parent.parent / "ners590_v03_analysis" / output_dir.name
+        print(
+            "[parse-runner] remapping ambiguous v03 output dir | "
+            f"requested={output_dir} -> canonical={canonical}",
+            flush=True,
+        )
+        return canonical
+    return output_dir
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         description="Parse the multi-file NERS590 v02 dataset into merged CSV tables."
@@ -30,6 +42,7 @@ def main() -> None:
         help="Directory for merged parsed CSV outputs.",
     )
     args = parser.parse_args()
+    args.output_dir = normalize_output_dir(args.raw_dir, args.output_dir)
 
     outputs = parse_raw_dataset(args.raw_dir, args.output_dir)
     print(f"Parsed dataset written to {args.output_dir}")

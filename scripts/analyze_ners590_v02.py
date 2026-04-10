@@ -37,6 +37,18 @@ def numeric_summary(values: np.ndarray, prefix: str = "") -> dict[str, float]:
     return result
 
 
+def normalize_v03_dir(path: Path, leaf_name: str) -> Path:
+    if path.parent.name == "ners590_v03":
+        canonical = path.parent.parent / "ners590_v03_analysis" / leaf_name
+        print(
+            "[analysis-runner] remapping ambiguous v03 path | "
+            f"requested={path} -> canonical={canonical}",
+            flush=True,
+        )
+        return canonical
+    return path
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         description="Run power-aware analysis on the parsed NERS590 v02 dataset."
@@ -54,6 +66,8 @@ def main() -> None:
         help="Directory for analysis CSV outputs.",
     )
     args = parser.parse_args()
+    args.parsed_dir = normalize_v03_dir(args.parsed_dir, "parsed")
+    args.output_dir = normalize_v03_dir(args.output_dir, "analysis")
 
     ensure_dir(args.output_dir)
 

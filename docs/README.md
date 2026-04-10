@@ -12,6 +12,8 @@ This folder has been reorganized to keep active materials clean and move repetit
 
 For the current project direction, open [active_v02/README.md](/Users/bingqingwang/Desktop/UMich/590_Machine%20learning/project/docs/active_v02/README.md).
 
+For generated result-folder conventions, open [results/README.md](/Users/bingqingwang/Desktop/UMich/590_Machine%20learning/project/results/README.md).
+
 For archived run-report references, open [archive_generated_reports/README.md](/Users/bingqingwang/Desktop/UMich/590_Machine%20learning/project/docs/archive_generated_reports/README.md).
 
 For legacy history, open [legacy_global_kin/README.md](/Users/bingqingwang/Desktop/UMich/590_Machine%20learning/project/docs/legacy_global_kin/README.md).

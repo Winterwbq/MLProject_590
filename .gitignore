@@ -2,6 +2,7 @@
 .env
 *.log
 *.zip
+*.docx
 
 .idea
 .vscode

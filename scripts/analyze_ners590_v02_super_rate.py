@@ -38,6 +38,18 @@ def numeric_summary(values: np.ndarray, prefix: str = "") -> dict[str, float]:
     return summary
 
 
+def normalize_v03_dir(path: Path, leaf_name: str) -> Path:
+    if path.parent.name == "ners590_v03":
+        canonical = path.parent.parent / "ners590_v03_analysis" / leaf_name
+        print(
+            "[super-analysis-runner] remapping ambiguous v03 path | "
+            f"requested={path} -> canonical={canonical}",
+            flush=True,
+        )
+        return canonical
+    return path
+
+
 def safe_log_corr(x: pd.Series, y: pd.Series) -> float:
     mask = (x > 0.0) & (y > 0.0)
     if mask.sum() < 3:
@@ -62,6 +74,8 @@ def main() -> None:
         help="Directory for super-rate analysis CSV outputs.",
     )
     args = parser.parse_args()
+    args.parsed_dir = normalize_v03_dir(args.parsed_dir, "parsed")
+    args.output_dir = normalize_v03_dir(args.output_dir, "super_rate_analysis")
 
     ensure_dir(args.output_dir)
 

@@ -44,6 +44,18 @@ def resolve_holdout_power_labels(raw_dir: Path, requested: list[str] | None) -> 
     return [label]
 
 
+def normalize_results_root(raw_dir: Path, results_root: Path) -> Path:
+    if raw_dir.name == "NERS590_data_V03" and results_root.name == "ners590_v03":
+        canonical = results_root.parent / "ners590_v03_super_rate"
+        print(
+            "[runner] remapping ambiguous v03 results root | "
+            f"requested={results_root} -> canonical={canonical}",
+            flush=True,
+        )
+        return canonical
+    return results_root
+
+
 def build_super_rate_curated_configs() -> list[ModelConfig]:
     return [
         ModelConfig(
@@ -129,6 +141,7 @@ def main() -> None:
         ),
     )
     args = parser.parse_args()
+    args.results_root = normalize_results_root(args.raw_dir, args.results_root)
 
     configs = build_super_rate_curated_configs()
     feature_sets = sorted({config.feature_set for config in configs})
