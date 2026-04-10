@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import re
 import sys
+import time
 from pathlib import Path
 
 
@@ -13,6 +14,15 @@ if str(SRC_DIR) not in sys.path:
 
 from global_kin_ml.models import ModelConfig
 from global_kin_ml.pipeline import run_training_experiment
+
+
+def format_seconds(seconds: float) -> str:
+    total = max(0, int(round(seconds)))
+    hours, rem = divmod(total, 3600)
+    minutes, secs = divmod(rem, 60)
+    if hours > 0:
+        return f"{hours:02d}:{minutes:02d}:{secs:02d}"
+    return f"{minutes:02d}:{secs:02d}"
 
 
 def infer_power_label(raw_file: Path) -> tuple[float, str]:
@@ -129,11 +139,19 @@ def main() -> None:
     feature_sets = sorted({config.feature_set for config in configs})
     holdout_power_labels = resolve_holdout_power_labels(args.raw_dir, args.holdout_power_labels)
     holdout_suffix = "_".join(label.replace(".", "p") for label in holdout_power_labels)
+    run_start = time.perf_counter()
+    print(
+        "[runner] RATE CONST pipeline start | "
+        f"raw_dir={args.raw_dir} | results_root={args.results_root} | holdout={holdout_power_labels}",
+        flush=True,
+    )
 
     random_results = args.results_root / "training_random_case"
     random_report = (
         REPO_ROOT / "docs" / "archive_generated_reports" / "ners590_v02_training_random_case_report.md"
     )
+    split_start = time.perf_counter()
+    print(f"[runner] start split=random_case -> {random_results}", flush=True)
     run_training_experiment(
         raw_dataset_path=args.raw_dir,
         results_dir=random_results,
@@ -142,7 +160,11 @@ def main() -> None:
         split_strategy="random_case",
         configs=configs,
     )
-    print(f"Completed random-case training run in {random_results}")
+    print(
+        f"[runner] completed split=random_case | elapsed={format_seconds(time.perf_counter() - split_start)} | "
+        f"path={random_results}",
+        flush=True,
+    )
 
     power_holdout_results = args.results_root / f"training_power_holdout_{holdout_suffix}"
     power_holdout_report = (
@@ -150,6 +172,11 @@ def main() -> None:
         / "docs"
         / "archive_generated_reports"
         / f"ners590_v02_training_power_holdout_{holdout_suffix}_report.md"
+    )
+    split_start = time.perf_counter()
+    print(
+        f"[runner] start split=power_holdout ({','.join(holdout_power_labels)}) -> {power_holdout_results}",
+        flush=True,
     )
     run_training_experiment(
         raw_dataset_path=args.raw_dir,
@@ -160,7 +187,15 @@ def main() -> None:
         holdout_power_labels=holdout_power_labels,
         configs=configs,
     )
-    print(f"Completed power-holdout training run in {power_holdout_results}")
+    print(
+        f"[runner] completed split=power_holdout | elapsed={format_seconds(time.perf_counter() - split_start)} | "
+        f"path={power_holdout_results}",
+        flush=True,
+    )
+    print(
+        f"[runner] RATE CONST pipeline done | total_elapsed={format_seconds(time.perf_counter() - run_start)}",
+        flush=True,
+    )
 
 
 if __name__ == "__main__":

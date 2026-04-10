@@ -3,6 +3,7 @@ from __future__ import annotations
 import importlib.util
 import re
 import sys
+import time
 from dataclasses import dataclass
 from pathlib import Path
 from types import ModuleType
@@ -21,6 +22,15 @@ REQUIRED_PARSED_TABLES = {
     "training_inputs": "training_inputs.csv",
     "training_targets": "training_targets.csv",
 }
+
+
+def _format_seconds(seconds: float) -> str:
+    total = max(0, int(round(seconds)))
+    hours, rem = divmod(total, 3600)
+    minutes, secs = divmod(rem, 60)
+    if hours > 0:
+        return f"{hours:02d}:{minutes:02d}:{secs:02d}"
+    return f"{minutes:02d}:{secs:02d}"
 
 
 @dataclass
@@ -69,6 +79,11 @@ def _merge_cases_from_directory(module: ModuleType, raw_dir: Path) -> tuple[list
     raw_files = sorted(raw_dir.glob("*.out"), key=lambda path: _power_metadata_from_path(path)["power_mj"])
     if not raw_files:
         raise FileNotFoundError(f"No .out files found in {raw_dir}")
+    merge_start = time.perf_counter()
+    print(
+        f"[parse] start merge | raw_dir={raw_dir} | files={len(raw_files)}",
+        flush=True,
+    )
 
     all_cases: list[object] = []
     case_metadata_rows: list[dict[str, object]] = []
@@ -83,6 +98,7 @@ def _merge_cases_from_directory(module: ModuleType, raw_dir: Path) -> tuple[list
     density_group_offset = 0
 
     for source_file_id, raw_file in enumerate(raw_files, start=1):
+        file_start = time.perf_counter()
         file_cases, file_metadata = module.parse_dataset(raw_file)
         power_metadata = _power_metadata_from_path(raw_file)
 
@@ -138,6 +154,17 @@ def _merge_cases_from_directory(module: ModuleType, raw_dir: Path) -> tuple[list
 
         global_case_offset += file_metadata["total_cases"]
         density_group_offset += file_metadata["density_group_count"]
+        elapsed = time.perf_counter() - merge_start
+        avg_per_file = elapsed / source_file_id
+        remaining_files = len(raw_files) - source_file_id
+        eta_seconds = avg_per_file * remaining_files
+        print(
+            "[parse] file complete | "
+            f"{source_file_id}/{len(raw_files)} | file={raw_file.name} | "
+            f"cases={file_metadata['total_cases']} | file_elapsed={_format_seconds(time.perf_counter() - file_start)} | "
+            f"elapsed={_format_seconds(elapsed)} | eta={_format_seconds(eta_seconds)}",
+            flush=True,
+        )
 
     merged_metadata = {
         "source_path": str(raw_dir),
@@ -156,6 +183,11 @@ def _merge_cases_from_directory(module: ModuleType, raw_dir: Path) -> tuple[list
         "case_block_lines": getattr(module, "CASE_BLOCK_LINES", 344),
         "per_file_summary": file_summary_rows,
     }
+    total_elapsed = time.perf_counter() - merge_start
+    print(
+        f"[parse] merge done | total_cases={len(all_cases)} | elapsed={_format_seconds(total_elapsed)}",
+        flush=True,
+    )
     return all_cases, merged_metadata, pd.DataFrame(case_metadata_rows)
 
 

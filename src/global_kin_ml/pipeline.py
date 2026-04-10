@@ -65,6 +65,27 @@ def _prefixed_metric_row(prefix: str, metrics: dict[str, float]) -> dict[str, fl
     return {f"{prefix}_{key}": value for key, value in metrics.items()}
 
 
+def _format_seconds(seconds: float | None) -> str:
+    if seconds is None or not np.isfinite(seconds):
+        return "n/a"
+    total = max(0, int(round(seconds)))
+    hours, rem = divmod(total, 3600)
+    minutes, secs = divmod(rem, 60)
+    if hours > 0:
+        return f"{hours:02d}:{minutes:02d}:{secs:02d}"
+    return f"{minutes:02d}:{secs:02d}"
+
+
+def _estimate_eta_seconds(completed: int, total: int, elapsed_seconds: float) -> float | None:
+    if completed <= 0 or total <= 0 or elapsed_seconds <= 0:
+        return None
+    remaining = max(total - completed, 0)
+    if remaining == 0:
+        return 0.0
+    avg = elapsed_seconds / completed
+    return avg * remaining
+
+
 def _aggregate_trial_summary(trial_frame: pd.DataFrame) -> pd.DataFrame:
     successful = trial_frame[trial_frame["status"] == "success"].copy()
     metric_columns = [
@@ -382,17 +403,26 @@ def run_training_experiment(
     target_name: str = "rate_const",
     drop_constant_targets: bool = False,
 ) -> dict[str, Path]:
+    experiment_start = time.perf_counter()
     results_dir.mkdir(parents=True, exist_ok=True)
     output_dirs = {name: results_dir / subdir for name, subdir in RESULT_SUBDIRS.items()}
     for path in output_dirs.values():
         path.mkdir(parents=True, exist_ok=True)
 
+    print(
+        "[training] start | "
+        f"target={target_name} | split={split_strategy} | raw={raw_dataset_path} | results={results_dir}",
+        flush=True,
+    )
+
     manifest_rows: list[dict[str, object]] = []
     verification_rows: list[dict[str, object]] = []
 
     parsed_dir = output_dirs["data"] / "parsed"
+    parse_start = time.perf_counter()
     parse_raw_dataset(raw_dataset_path, parsed_dir)
     dataset = load_parsed_dataset(parsed_dir)
+    parse_elapsed = time.perf_counter() - parse_start
     verification_rows.extend(validate_parsed_shapes(dataset))
     manifest_rows.append(
         {
@@ -406,6 +436,12 @@ def run_training_experiment(
     target_spec = get_target_spec(target_name)
     full_targets, full_reaction_map = _build_target_frame(dataset, inputs, target_spec)
     metadata_columns = get_case_metadata_columns(inputs)
+    power_levels = int(inputs["power_label"].nunique()) if "power_label" in inputs.columns else 1
+    print(
+        "[training] parsed dataset | "
+        f"cases={len(inputs)} | powers={power_levels} | parse_elapsed={_format_seconds(parse_elapsed)}",
+        flush=True,
+    )
 
     if split_strategy == "random_case":
         splits = create_random_case_splits(total_cases=len(inputs))
@@ -417,6 +453,12 @@ def run_training_experiment(
         splits = create_group_holdout_splits(inputs["power_label"], holdout_power_labels)
     else:
         raise ValueError(f"Unsupported split_strategy: {split_strategy}")
+    print(
+        "[training] split ready | "
+        f"trainval={len(splits.trainval_indices)} | test={len(splits.test_indices)} | "
+        f"folds={len(splits.validation_folds)} | holdout={holdout_power_labels or []}",
+        flush=True,
+    )
     split_assignment = build_split_assignment_frame(inputs, splits)
     save_csv(split_assignment, output_dirs["data_snapshots"] / "split_assignments.csv")
     manifest_rows.append(
@@ -467,6 +509,11 @@ def run_training_experiment(
     )
     reaction_map = reaction_map.sort_values("_target_order").drop(columns="_target_order").reset_index(drop=True)
     target_columns = kept_target_columns
+    print(
+        "[training] target columns | "
+        f"full={len(full_target_columns)} | active={len(target_columns)} | dropped={len(dropped_target_columns)}",
+        flush=True,
+    )
 
     target_cleaning_rows = []
     for _, reaction_row in full_reaction_map.iterrows():
@@ -536,6 +583,12 @@ def run_training_experiment(
             configs = configs[:max_configs]
         if feature_sets is None:
             feature_sets = sorted({config.feature_set for config in configs})
+    print(
+        "[training] search catalog | "
+        f"configs={len(configs)} | feature_sets={sorted(feature_sets)} | "
+        f"max_configs={max_configs if max_configs is not None else 'all'}",
+        flush=True,
+    )
     save_csv(_build_config_frame(configs), output_dirs["tuning"] / "model_config_catalog.csv")
 
     trial_rows = []
@@ -547,9 +600,25 @@ def run_training_experiment(
     total_possible_fits = len(configs) + len(configs) * max(0, len(splits.validation_folds) - 1)
     completed_configs = 0
     search_stage_rows = []
+    search_start = time.perf_counter()
+    total_folds = len(splits.validation_folds)
+    progress_print_every = max(10, len(active_configs) // 10)
+
+    print(
+        "[training] tuning start | "
+        f"expected_fits={total_possible_fits} | folds={total_folds} | "
+        f"progress_every={progress_print_every} fits",
+        flush=True,
+    )
 
     for fold in splits.validation_folds:
-        print(f"[training] fold {fold.fold_id}/5: preparing preprocessing artifacts")
+        fold_start = time.perf_counter()
+        fold_trial_start = len(trial_rows)
+        print(
+            f"[training] fold {fold.fold_id}/{total_folds} start | "
+            f"active_configs={len(active_configs)} | train={len(fold.train_indices)} | val={len(fold.val_indices)}",
+            flush=True,
+        )
         train_inputs = inputs.loc[fold.train_indices]
         val_inputs = inputs.loc[fold.val_indices]
         train_targets = targets.loc[fold.train_indices]
@@ -585,13 +654,8 @@ def run_training_experiment(
             x_val = transformer.transform(val_inputs).to_numpy(dtype=float)
             feature_matrices[feature_set] = (x_train, x_val)
 
-        for config in active_configs:
+        for config_index, config in enumerate(active_configs, start=1):
             completed_configs += 1
-            if completed_configs == 1 or completed_configs % 50 == 0:
-                print(
-                    f"[training] fold {fold.fold_id}: evaluating config {completed_configs}/{total_possible_fits} "
-                    f"({config.model_key})"
-                )
             x_train, x_val = feature_matrices[config.feature_set]
             row = {
                 "fold_id": fold.fold_id,
@@ -649,6 +713,28 @@ def run_training_experiment(
                 row["traceback"] = traceback.format_exc(limit=5)
             row["runtime_seconds"] = time.perf_counter() - start_time
             trial_rows.append(row)
+            should_print_progress = (
+                config_index <= 3
+                or config_index == len(active_configs)
+                or config_index % progress_print_every == 0
+            )
+            if should_print_progress:
+                tuning_elapsed = time.perf_counter() - search_start
+                eta_seconds = _estimate_eta_seconds(
+                    completed=completed_configs,
+                    total=total_possible_fits,
+                    elapsed_seconds=tuning_elapsed,
+                )
+                metric_value = row.get("validation_overall_log_rmse")
+                metric_text = f"{metric_value:.6f}" if isinstance(metric_value, (int, float)) else "n/a"
+                print(
+                    f"[training] fold {fold.fold_id}/{total_folds} | config {config_index}/{len(active_configs)} "
+                    f"| global {completed_configs}/{total_possible_fits} | status={row['status']} "
+                    f"| val_log_rmse={metric_text} | fit={_format_seconds(row['runtime_seconds'])} "
+                    f"| elapsed={_format_seconds(tuning_elapsed)} | eta={_format_seconds(eta_seconds)} "
+                    f"| model={config.model_key}",
+                    flush=True,
+                )
 
         if fold.fold_id == 1 and max_configs is None:
             stage1_frame = pd.DataFrame(trial_rows)
@@ -666,11 +752,49 @@ def run_training_experiment(
             total_possible_fits = len(configs) + len(active_configs) * max(
                 0, len(splits.validation_folds) - 1
             )
+            progress_print_every = max(10, len(active_configs) // 10)
+            tuning_elapsed = time.perf_counter() - search_start
+            eta_seconds = _estimate_eta_seconds(
+                completed=completed_configs,
+                total=total_possible_fits,
+                elapsed_seconds=tuning_elapsed,
+            )
             print(
-                f"[training] adaptive search retained {len(active_configs)} survivors for folds 2-5"
+                "[training] adaptive search | "
+                f"retained={len(active_configs)} survivors for folds 2-{total_folds} | "
+                f"new_expected_fits={total_possible_fits} | elapsed={_format_seconds(tuning_elapsed)} | "
+                f"eta={_format_seconds(eta_seconds)}",
+                flush=True,
             )
 
+        fold_elapsed = time.perf_counter() - fold_start
+        fold_frame = pd.DataFrame(trial_rows[fold_trial_start:])
+        success_frame = fold_frame[fold_frame["status"] == "success"]
+        best_fold_rmse = (
+            float(success_frame["validation_overall_log_rmse"].min())
+            if not success_frame.empty
+            else float("nan")
+        )
+        tuning_elapsed = time.perf_counter() - search_start
+        eta_seconds = _estimate_eta_seconds(
+            completed=completed_configs,
+            total=total_possible_fits,
+            elapsed_seconds=tuning_elapsed,
+        )
+        print(
+            "[training] fold complete | "
+            f"fold={fold.fold_id}/{total_folds} | elapsed={_format_seconds(fold_elapsed)} | "
+            f"best_val_log_rmse={best_fold_rmse:.6f} | tuning_elapsed={_format_seconds(tuning_elapsed)} | "
+            f"eta={_format_seconds(eta_seconds)}",
+            flush=True,
+        )
+
     trial_frame = pd.DataFrame(trial_rows)
+    tuning_elapsed = time.perf_counter() - search_start
+    print(
+        f"[training] tuning finished | fits={len(trial_rows)} | elapsed={_format_seconds(tuning_elapsed)}",
+        flush=True,
+    )
     save_csv(trial_frame, output_dirs["tuning"] / "model_trials_foldwise.csv")
     manifest_rows.append(
         {
@@ -683,6 +807,12 @@ def run_training_experiment(
     save_csv(summary, output_dirs["tuning"] / "model_leaderboard_summary.csv")
     selected = _select_best_model(summary)
     save_csv(pd.DataFrame([selected]), output_dirs["tuning"] / "selected_model.csv")
+    print(
+        "[training] model selected | "
+        f"model={selected['model_key']} | family={selected['model_family']} | "
+        f"feature_set={selected['feature_set']} | mean_val_log_rmse={selected['mean_validation_log_rmse']:.6f}",
+        flush=True,
+    )
     if search_stage_rows:
         save_csv(pd.DataFrame(search_stage_rows), output_dirs["tuning"] / "search_stage_summary.csv")
 
@@ -720,14 +850,25 @@ def run_training_experiment(
     save_csv(oracle_test_per_case, output_dirs["pca"] / "oracle_test_per_case_by_k.csv")
     verification_rows.extend(oracle_test_monotonic.to_dict(orient="records"))
 
+    final_stage_start = time.perf_counter()
     selected_config = next(config for config in configs if config.model_key == selected["model_key"])
     final_feature_transformer = build_feature_transformer(selected_config.feature_set).fit(trainval_inputs)
     x_trainval = final_feature_transformer.transform(trainval_inputs).to_numpy(dtype=float)
     x_test = final_feature_transformer.transform(test_inputs).to_numpy(dtype=float)
 
-    print(f"[training] final fit using selected model: {selected_config.model_key}")
+    print(
+        "[training] final fit start | "
+        f"model={selected_config.model_key} | trainval_cases={x_trainval.shape[0]} | test_cases={x_test.shape[0]}",
+        flush=True,
+    )
+    final_fit_start = time.perf_counter()
     final_model = build_model(selected_config)
     final_model.fit(x_train=x_trainval, y_train=y_trainval_log)
+    final_fit_elapsed = time.perf_counter() - final_fit_start
+    print(
+        f"[training] final fit complete | elapsed={_format_seconds(final_fit_elapsed)}",
+        flush=True,
+    )
     y_test_log_pred = final_model.predict(x_test)
     y_test_original_pred = final_target_transformer.inverse_transform_array(y_test_log_pred)
 
@@ -814,6 +955,14 @@ def run_training_experiment(
         target_value_label=target_spec.name,
     )
     smape_frame = build_smape_frame(prediction_frame, target_value_label=target_spec.name)
+    print(
+        "[training] test metrics ready | "
+        f"log_rmse={full_overall_metrics['overall_log_rmse']:.6f} | "
+        f"log_mae={full_overall_metrics['overall_log_mae']:.6f} | "
+        f"log_r2={full_overall_metrics['overall_log_r2']:.6f} | "
+        f"factor5={full_overall_metrics['factor5_accuracy_positive_only']:.4f}",
+        flush=True,
+    )
 
     save_csv(pd.DataFrame([active_overall_metrics]), output_dirs["evaluation"] / "test_overall_metrics_active_targets.csv")
     save_csv(active_per_reaction_metrics, output_dirs["evaluation"] / "test_per_reaction_metrics_active_targets.csv")
@@ -859,6 +1008,7 @@ def run_training_experiment(
         smape_per_case.nlargest(10, "median_smape"),
         output_dirs["evaluation"] / "worst_10_cases_by_smape.csv",
     )
+    print("[training] evaluation artifacts written", flush=True)
 
     verification_rows.append(
         {
@@ -872,6 +1022,7 @@ def run_training_experiment(
     verification_frame = pd.DataFrame(verification_rows)
     save_csv(verification_frame, results_dir / "verification_checks.csv")
 
+    print("[training] generating figures", flush=True)
     plot_pca_scree(explained_variance, output_dirs["figures"] / "pca_scree.png")
     plot_oracle_error(oracle_test_overall, output_dirs["figures"] / "oracle_reconstruction_error_by_k.png")
     plot_model_leaderboard(summary, output_dirs["figures"] / "model_leaderboard.png")
@@ -912,6 +1063,7 @@ def run_training_experiment(
         smape_by_magnitude,
         output_dirs["figures"] / "smape_by_magnitude.png",
     )
+    print("[training] figures written", flush=True)
 
     manifest_rows.extend(
         [
@@ -994,9 +1146,22 @@ def run_training_experiment(
     )
     manifest_frame = pd.DataFrame(manifest_rows)
     save_csv(manifest_frame, results_dir / "output_manifest.csv")
+    final_stage_elapsed = time.perf_counter() - final_stage_start
+    print(
+        f"[training] final stage complete | elapsed={_format_seconds(final_stage_elapsed)}",
+        flush=True,
+    )
 
     if report_output_path is not None:
+        print(f"[training] exporting report -> {report_output_path}", flush=True)
         export_experiment_report(results_dir=results_dir, output_path=report_output_path)
+
+    total_elapsed = time.perf_counter() - experiment_start
+    print(
+        "[training] done | "
+        f"results={results_dir} | total_elapsed={_format_seconds(total_elapsed)}",
+        flush=True,
+    )
 
     return {
         "results_dir": results_dir,
