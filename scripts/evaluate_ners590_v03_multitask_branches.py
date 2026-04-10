@@ -1,20 +1,14 @@
 from __future__ import annotations
 
 import argparse
-import sys
 from pathlib import Path
 
+from _runner_utils import REPO_ROOT, ensure_src_on_path
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
-SRC_DIR = REPO_ROOT / "src"
-if str(SRC_DIR) not in sys.path:
-    sys.path.insert(0, str(SRC_DIR))
-SCRIPTS_DIR = REPO_ROOT / "scripts"
-if str(SCRIPTS_DIR) not in sys.path:
-    sys.path.insert(0, str(SCRIPTS_DIR))
+ensure_src_on_path(REPO_ROOT)
 
+from global_kin_ml.experiment_configs import build_multitask_configs
 from global_kin_ml.multitask_pipeline import run_multitask_family_finalist_evaluations
-from run_ners590_v03_multitask_training import build_multitask_configs
 
 
 def main() -> None:
@@ -56,4 +50,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

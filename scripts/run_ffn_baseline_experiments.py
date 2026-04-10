@@ -1,14 +1,11 @@
 from __future__ import annotations
 
 import argparse
-import sys
 from pathlib import Path
 
+from _runner_utils import REPO_ROOT, ensure_src_on_path
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
-SRC_DIR = REPO_ROOT / "src"
-if str(SRC_DIR) not in sys.path:
-    sys.path.insert(0, str(SRC_DIR))
+ensure_src_on_path(REPO_ROOT)
 
 from global_kin_ml.ffn_baselines import run_ffn_baseline_experiments
 

@@ -1,89 +1,21 @@
 from __future__ import annotations
 
 import argparse
-import re
-import sys
 import time
 from pathlib import Path
 
+from _runner_utils import (
+    REPO_ROOT,
+    build_holdout_suffix,
+    ensure_src_on_path,
+    format_seconds,
+    resolve_holdout_power_labels,
+)
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
-SRC_DIR = REPO_ROOT / "src"
-if str(SRC_DIR) not in sys.path:
-    sys.path.insert(0, str(SRC_DIR))
+ensure_src_on_path(REPO_ROOT)
 
-from global_kin_ml.models import ModelConfig
+from global_kin_ml.experiment_configs import build_multitask_configs
 from global_kin_ml.multitask_pipeline import run_multitask_training_experiment
-
-
-def format_seconds(seconds: float) -> str:
-    total = max(0, int(round(seconds)))
-    hours, rem = divmod(total, 3600)
-    minutes, secs = divmod(rem, 60)
-    if hours > 0:
-        return f"{hours:02d}:{minutes:02d}:{secs:02d}"
-    return f"{minutes:02d}:{secs:02d}"
-
-
-def infer_power_label(raw_file: Path) -> tuple[float, str]:
-    match = re.search(r"(\d+(?:[p\.]\d+)?)mJ", raw_file.name, flags=re.IGNORECASE)
-    if match is None:
-        raise ValueError(f"Could not parse power label from filename: {raw_file.name}")
-    token = match.group(1).replace("p", ".").replace("P", ".")
-    value = float(token)
-    return value, f"{value:g}mJ"
-
-
-def resolve_holdout_power_labels(raw_dir: Path, requested: list[str] | None) -> list[str]:
-    if requested:
-        return requested
-    candidates = [infer_power_label(path) for path in raw_dir.glob("*.out")]
-    if not candidates:
-        raise FileNotFoundError(f"No .out files found in {raw_dir}")
-    _value, label = max(candidates, key=lambda item: item[0])
-    return [label]
-
-
-def build_multitask_configs() -> list[ModelConfig]:
-    common = {
-        "hidden_layers": 3,
-        "dropout": 0.0,
-        "weight_decay": 1e-5,
-        "learning_rate": 1e-3,
-        "batch_size": 256,
-        "max_epochs": 120,
-        "patience": 15,
-    }
-    return [
-        ModelConfig(
-            model_key="joint__single_head_mlp__all_inputs_plus_log_en_log_power__w_256__layers_3__drop_0.0__wd_1e-05",
-            model_family="joint_single_head_mlp",
-            feature_set="all_inputs_plus_log_en_log_power",
-            latent_k=None,
-            hyperparameters={"hidden_width": 256, **common},
-        ),
-        ModelConfig(
-            model_key="joint__single_head_mlp__composition_pca_plus_log_en_log_power__w_256__layers_3__drop_0.0__wd_1e-05",
-            model_family="joint_single_head_mlp",
-            feature_set="composition_pca_plus_log_en_log_power",
-            latent_k=None,
-            hyperparameters={"hidden_width": 256, **common},
-        ),
-        ModelConfig(
-            model_key="joint__two_head_mlp__all_inputs_plus_log_en_log_power__w_256__layers_3__drop_0.0__wd_1e-05",
-            model_family="joint_two_head_mlp",
-            feature_set="all_inputs_plus_log_en_log_power",
-            latent_k=None,
-            hyperparameters={"hidden_width": 256, "rate_loss_weight": 0.5, "super_loss_weight": 0.5, **common},
-        ),
-        ModelConfig(
-            model_key="joint__two_head_mlp__composition_pca_plus_log_en_log_power__w_256__layers_3__drop_0.0__wd_1e-05",
-            model_family="joint_two_head_mlp",
-            feature_set="composition_pca_plus_log_en_log_power",
-            latent_k=None,
-            hyperparameters={"hidden_width": 256, "rate_loss_weight": 0.5, "super_loss_weight": 0.5, **common},
-        ),
-    ]
 
 
 def main() -> None:
@@ -113,7 +45,7 @@ def main() -> None:
     configs = build_multitask_configs()
     feature_sets = sorted({config.feature_set for config in configs})
     holdout_power_labels = resolve_holdout_power_labels(args.raw_dir, args.holdout_power_labels)
-    holdout_suffix = "_".join(label.replace(".", "p") for label in holdout_power_labels)
+    holdout_suffix = build_holdout_suffix(holdout_power_labels)
     run_start = time.perf_counter()
 
     print(
@@ -166,4 +98,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

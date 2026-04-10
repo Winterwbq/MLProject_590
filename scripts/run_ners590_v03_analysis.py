@@ -1,17 +1,10 @@
 from __future__ import annotations
 
 import argparse
-import subprocess
 import sys
 from pathlib import Path
 
-
-REPO_ROOT = Path(__file__).resolve().parents[1]
-
-
-def run_step(cmd: list[str]) -> None:
-    print(f"[v03-analysis] running: {' '.join(cmd)}", flush=True)
-    subprocess.run(cmd, check=True, cwd=REPO_ROOT)
+from _runner_utils import REPO_ROOT, run_subprocess_step
 
 
 def main() -> None:
@@ -38,55 +31,65 @@ def main() -> None:
     super_analysis_dir = args.results_root / "super_rate_analysis"
     super_figures_dir = args.results_root / "super_rate_figures"
 
-    run_step(
-        [
+    run_subprocess_step(
+        log_prefix="[v03-analysis]",
+        cwd=REPO_ROOT,
+        cmd=[
             sys.executable,
             "scripts/parse_ners590_v02.py",
             "--raw-dir",
             str(args.raw_dir),
             "--output-dir",
             str(parsed_dir),
-        ]
+        ],
     )
-    run_step(
-        [
+    run_subprocess_step(
+        log_prefix="[v03-analysis]",
+        cwd=REPO_ROOT,
+        cmd=[
             sys.executable,
             "scripts/analyze_ners590_v02.py",
             "--parsed-dir",
             str(parsed_dir),
             "--output-dir",
             str(analysis_dir),
-        ]
+        ],
     )
-    run_step(
-        [
+    run_subprocess_step(
+        log_prefix="[v03-analysis]",
+        cwd=REPO_ROOT,
+        cmd=[
             sys.executable,
             "scripts/plot_ners590_v02_analysis.py",
             "--analysis-dir",
             str(analysis_dir),
             "--output-dir",
             str(figures_dir),
-        ]
+        ],
     )
-    run_step(
-        [
+    run_subprocess_step(
+        log_prefix="[v03-analysis]",
+        cwd=REPO_ROOT,
+        cmd=[
             sys.executable,
             "scripts/analyze_ners590_v02_super_rate.py",
             "--parsed-dir",
             str(parsed_dir),
             "--output-dir",
             str(super_analysis_dir),
-        ]
+        ],
     )
-    run_step(
-        [
+    run_subprocess_step(
+        log_prefix="[v03-analysis]",
+        cwd=REPO_ROOT,
+        cmd=[
             sys.executable,
             "scripts/plot_ners590_v02_super_rate_analysis.py",
             "--analysis-dir",
             str(super_analysis_dir),
             "--output-dir",
             str(super_figures_dir),
-        ]
+        ],
     )
     print(f"[v03-analysis] done -> {args.results_root}", flush=True)
 

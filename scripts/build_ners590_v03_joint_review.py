@@ -1,12 +1,10 @@
 from __future__ import annotations
 
 import argparse
-import subprocess
 import sys
 from pathlib import Path
 
-
-REPO_ROOT = Path(__file__).resolve().parents[1]
+from _runner_utils import REPO_ROOT, run_subprocess_step
 
 
 def main() -> None:
@@ -67,8 +65,7 @@ def main() -> None:
         "--output-dir",
         str(args.output_dir),
     ]
-    print(f"[v03-joint-review] running: {' '.join(cmd)}", flush=True)
-    subprocess.run(cmd, check=True, cwd=REPO_ROOT)
+    run_subprocess_step(cmd=cmd, cwd=REPO_ROOT, log_prefix="[v03-joint-review]")
 
 
 if __name__ == "__main__":
