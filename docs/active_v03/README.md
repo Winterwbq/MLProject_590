@@ -7,6 +7,7 @@ This folder is the current documentation home for the expanded `NERS590_data_V03
 - [v03 dataset analysis report](/Users/bingqingwang/Desktop/UMich/590_Machine%20learning/project/docs/active_v03/ners590_v03_dataset_analysis_report.md)
 - [v03 multitask training report](/Users/bingqingwang/Desktop/UMich/590_Machine%20learning/project/docs/active_v03/ners590_v03_multitask_training_report.md)
 - [v03 paper draft](/Users/bingqingwang/Desktop/UMich/590_Machine%20learning/project/docs/active_v03/ners590_v03_paper_draft.md)
+- [v03 code structure and run guide](/Users/bingqingwang/Desktop/UMich/590_Machine%20learning/project/docs/active_v03/code_structure_and_run_guide.md)
 
 ## Result Roots
 
