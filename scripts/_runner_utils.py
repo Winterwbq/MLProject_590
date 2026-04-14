@@ -60,7 +60,7 @@ def remap_ambiguous_v03_results_root(
     canonical_name: str,
     log_prefix: str = "[runner]",
 ) -> Path:
-    if raw_dir.name == "NERS590_data_V03" and results_root.name == "ners590_v03":
+    if raw_dir.name == "dataset/NERS590_data_V03" and results_root.name == "ners590_v03":
         canonical = results_root.parent / canonical_name
         print(
             f"{log_prefix} remapping ambiguous v03 results root | "

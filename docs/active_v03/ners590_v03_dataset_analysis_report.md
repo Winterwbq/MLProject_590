@@ -1,6 +1,6 @@
 # NERS590 v03 Dataset Analysis Report
 
-This report summarizes the expanded `NERS590_data_V03` dataset used for the new RATE CONST, SUPER RATE, and multitask experiments.
+This report summarizes the expanded `dataset/NERS590_data_V03` dataset used for the new RATE CONST, SUPER RATE, and multitask experiments.
 
 ## Dataset Scope
 

@@ -11,7 +11,7 @@ from global_kin_ml.data import parse_raw_dataset
 
 
 def normalize_output_dir(raw_dir: Path, output_dir: Path) -> Path:
-    if raw_dir.name == "NERS590_data_V03" and output_dir.parent.name == "ners590_v03":
+    if raw_dir.name == "dataset/NERS590_data_V03" and output_dir.parent.name == "ners590_v03":
         canonical = output_dir.parent.parent / "ners590_v03_analysis" / output_dir.name
         print(
             "[parse-runner] remapping ambiguous v03 output dir | "

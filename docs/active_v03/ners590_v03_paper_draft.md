@@ -4,7 +4,7 @@ Status: draft based on completed v03 artifacts available on 2026-04-10.
 
 ## Abstract
 
-We studied the expanded `NERS590_data_V03` kinetic dataset as a surrogate-modeling problem: predict 204 RATE CONST outputs and 204 SUPER RATE outputs from gas composition, reduced electric field, and discharge power. The parsed v03 dataset contains 83,317 cases from 13 power levels, with each power file contributing 6,409 cases arranged as 221 number-density groups and 29 `E/N` points. The target distributions are highly non-Gaussian and sparse: RATE CONST has 16,996,668 scalar entries with 2,238,067 zeros, while SUPER RATE has the same number of scalar entries but 10,308,324 zeros.
+We studied the expanded `dataset/NERS590_data_V03` kinetic dataset as a surrogate-modeling problem: predict 204 RATE CONST outputs and 204 SUPER RATE outputs from gas composition, reduced electric field, and discharge power. The parsed v03 dataset contains 83,317 cases from 13 power levels, with each power file contributing 6,409 cases arranged as 221 number-density groups and 29 `E/N` points. The target distributions are highly non-Gaussian and sparse: RATE CONST has 16,996,668 scalar entries with 2,238,067 zeros, while SUPER RATE has the same number of scalar entries but 10,308,324 zeros.
 
 We evaluated two split settings. The random-case split tests interpolation within the full observed power/composition/grid distribution. The 10mJ power-holdout split tests transfer to an unseen highest-power file. We trained separate-task models for RATE CONST and SUPER RATE, plus two multitask neural baselines: a shared single-head MLP that predicts RATE CONST and SUPER RATE together, and a shared-backbone/two-head MLP that predicts both tasks through separate heads. Across both splits and both target groups, direct ExtraTrees models were the strongest final choice. For RATE CONST, ExtraTrees achieved test log-RMSE 0.0685 on random cases and 0.0487 on the 10mJ holdout. For SUPER RATE, ExtraTrees achieved test log-RMSE 0.00382 on random cases and 0.00362 on the 10mJ holdout. Multitask MLPs learned physically correlated outputs, but they did not beat the separate ExtraTrees models in the present data regime.
 
@@ -12,7 +12,7 @@ Evidence: dataset counts and target distributions come from [`../../results/ners
 
 ## 1. Dataset and Prediction Tasks
 
-The v03 dataset is an expanded replacement for the earlier v02 and original `global_kin_boltz.out` datasets. The raw source is `NERS590_data_V03`, where each `.out` file corresponds to one deposited power value. The completed v03 parsing pass found 13 power levels: `0.1mJ`, `0.2mJ`, `0.5mJ`, and integer powers from `1mJ` to `10mJ`. Every power file has the same case structure: 221 density groups times 29 local `E/N` cases, giving 6,409 rows per power and 83,317 total cases.
+The v03 dataset is an expanded replacement for the earlier v02 and original `global_kin_boltz.out` datasets. The raw source is `dataset/NERS590_data_V03`, where each `.out` file corresponds to one deposited power value. The completed v03 parsing pass found 13 power levels: `0.1mJ`, `0.2mJ`, `0.5mJ`, and integer powers from `1mJ` to `10mJ`. Every power file has the same case structure: 221 density groups times 29 local `E/N` cases, giving 6,409 rows per power and 83,317 total cases.
 
 Each model input row consists of:
 

@@ -25,7 +25,7 @@ def main() -> None:
     parser.add_argument(
         "--raw-dir",
         type=Path,
-        default=REPO_ROOT / "NERS590_data_V03",
+        default=REPO_ROOT / "dataset/NERS590_data_V03",
         help="Directory containing the v03 raw .out files.",
     )
     parser.add_argument(

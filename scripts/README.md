@@ -1,6 +1,6 @@
 # Scripts Organization (V03-focused)
 
-This folder has been cleaned to keep only scripts relevant to the current `NERS590_data_V03` direction.
+This folder has been cleaned to keep only scripts relevant to the current `dataset/NERS590_data_V03` direction.
 
 ## Shared Utility
 

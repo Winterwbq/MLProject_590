@@ -5,7 +5,7 @@ This folder has been reorganized to keep active materials clean and move repetit
 ## Folder Layout
 
 - `docs/active_v02/`: current, canonical documentation for `NERS590_data_v02`
-- `docs/active_v03/`: current, canonical documentation for `NERS590_data_V03`
+- `docs/active_v03/`: current, canonical documentation for `dataset/NERS590_data_V03`
 - `docs/archive_generated_reports/`: archived run-level auto-generated report references
 - `docs/legacy_global_kin/`: legacy documentation for the abandoned `global_kin_boltz.out` direction
 

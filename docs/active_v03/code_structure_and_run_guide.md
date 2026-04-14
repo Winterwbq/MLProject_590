@@ -1,6 +1,6 @@
 # v03 Code Structure and Run Guide
 
-This guide explains how `scripts/` and `src/` work together for the current `NERS590_data_V03` workflow.
+This guide explains how `scripts/` and `src/` work together for the current `dataset/NERS590_data_V03` workflow.
 
 ## 1. High-Level Architecture
 
@@ -122,7 +122,7 @@ Minimum code to reproduce v03:
 
 - `scripts/` (all v03-related runners listed above)
 - `src/global_kin_ml/`
-- dataset access (`NERS590_data_V03/`) or instructions to obtain it
+- dataset access (`dataset/NERS590_data_V03/`) or instructions to obtain it
 
 Recommended to exclude from sharing:
 

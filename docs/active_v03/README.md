@@ -1,6 +1,6 @@
 # NERS590 v03 Documentation
 
-This folder is the current documentation home for the expanded `NERS590_data_V03` dataset.
+This folder is the current documentation home for the expanded `dataset/NERS590_data_V03` dataset.
 
 ## Core Reports
 
