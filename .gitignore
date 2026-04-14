@@ -3,6 +3,7 @@
 *.log
 *.zip
 *.docx
+*.pptx
 
 .idea
 .vscode
