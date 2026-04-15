@@ -8,6 +8,7 @@ import matplotlib
 matplotlib.use("Agg")
 
 import matplotlib.pyplot as plt
+from matplotlib.ticker import LogFormatterMathtext
 import numpy as np
 import pandas as pd
 import seaborn as sns
@@ -154,6 +155,7 @@ def _plot_output_distribution_overview(
     output_path: Path,
 ) -> None:
     centers = 0.5 * (bins[:-1] + bins[1:])
+    centers_original = np.power(10.0, centers)
     rate_density = rate_hist / max(rate_hist.sum(), 1)
     super_density = super_hist / max(super_hist.sum(), 1)
     rate_cdf = np.cumsum(rate_density)
@@ -178,18 +180,22 @@ def _plot_output_distribution_overview(
     axes[0].grid(alpha=0.2, axis="y")
 
     # Panel 2: positive-value log histogram
-    axes[1].plot(centers, rate_density, color="#C44E52", lw=2.0, label="RATE CONST")
-    axes[1].plot(centers, super_density, color="#8172B2", lw=2.0, label="SUPER RATE")
-    axes[1].set_xlabel("log_10(Value)")
+    axes[1].plot(centers_original, rate_density, color="#C44E52", lw=2.0, label="RATE CONST")
+    axes[1].plot(centers_original, super_density, color="#8172B2", lw=2.0, label="SUPER RATE")
+    axes[1].set_xscale("log")
+    axes[1].xaxis.set_major_formatter(LogFormatterMathtext(base=10.0))
+    axes[1].set_xlabel("Rate coefficients")
     axes[1].set_ylabel("Normalized frequency")
     axes[1].set_title("Positive Value Distribution (Log Scale)")
     axes[1].legend(loc="upper left")
     axes[1].grid(alpha=0.2)
 
     # Panel 3: CDF
-    axes[2].plot(centers, rate_cdf, color="#C44E52", lw=2.0, label="RATE CONST")
-    axes[2].plot(centers, super_cdf, color="#8172B2", lw=2.0, label="SUPER RATE")
-    axes[2].set_xlabel("log_10(Value)")
+    axes[2].plot(centers_original, rate_cdf, color="#C44E52", lw=2.0, label="RATE CONST")
+    axes[2].plot(centers_original, super_cdf, color="#8172B2", lw=2.0, label="SUPER RATE")
+    axes[2].set_xscale("log")
+    axes[2].xaxis.set_major_formatter(LogFormatterMathtext(base=10.0))
+    axes[2].set_xlabel("Rate coefficients")
     axes[2].set_ylabel("CDF")
     axes[2].set_ylim(0.0, 1.02)
     axes[2].set_title("Positive Value CDF (Log Scale)")

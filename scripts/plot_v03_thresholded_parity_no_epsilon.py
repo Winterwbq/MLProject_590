@@ -7,6 +7,7 @@ import argparse
 from pathlib import Path
 
 import matplotlib.pyplot as plt
+from matplotlib.ticker import LogFormatterMathtext
 import numpy as np
 import pandas as pd
 
@@ -25,10 +26,10 @@ def plot_parity_thresholded(
     true_vals = df.loc[mask, true_col].to_numpy(dtype=float)
     pred_vals = df.loc[mask, pred_col].to_numpy(dtype=float)
 
-    # Avoid invalid log values; this is only for plotting numerical stability.
-    pred_safe = np.maximum(pred_vals, np.finfo(np.float64).tiny)
-    x = np.log10(true_vals)
-    y = np.log10(pred_safe)
+    # Keep original-value axes in log scale; clip non-positive predictions to threshold for plotting.
+    pred_safe = np.maximum(pred_vals, threshold)
+    x = true_vals
+    y = pred_safe
 
     if x.size > sample_size:
         idx = np.linspace(0, x.size - 1, sample_size, dtype=int)
@@ -39,15 +40,18 @@ def plot_parity_thresholded(
     ax.scatter(x, y, s=10, alpha=0.35)
     lower = float(min(x.min(), y.min()))
     upper = float(max(x.max(), y.max()))
-    pad = 0.5
-    lo = lower - pad
-    hi = upper + pad
+    lo = lower / 1.5
+    hi = upper * 1.5
     ax.plot([lo, hi], [lo, hi], color="black", linestyle="--", linewidth=1.0)
     ax.set_xlim(lo, hi)
     ax.set_ylim(lo, hi)
+    ax.set_xscale("log")
+    ax.set_yscale("log")
+    ax.xaxis.set_major_formatter(LogFormatterMathtext(base=10.0))
+    ax.yaxis.set_major_formatter(LogFormatterMathtext(base=10.0))
     ax.set_title(title, fontsize=18, fontweight="bold")
-    ax.set_xlabel("True log10(value)", fontsize=15, fontweight="bold")
-    ax.set_ylabel("Predicted log10(value)", fontsize=15, fontweight="bold")
+    ax.set_xlabel("True values", fontsize=15, fontweight="bold")
+    ax.set_ylabel("Predicted values", fontsize=15, fontweight="bold")
     ax.tick_params(axis="both", labelsize=13)
     ax.grid(True, alpha=0.2)
     out_path.parent.mkdir(parents=True, exist_ok=True)
