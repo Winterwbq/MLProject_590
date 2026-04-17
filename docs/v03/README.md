@@ -4,14 +4,14 @@ This is the active reading path for the V03 experiment. Files are grouped by top
 
 ## 0. Dataset and Preprocessing
 
-- [dataset/0_v03_dataset_analysis_report.md](dataset/0_v03_dataset_analysis_report.md)
-  - V03 raw data structure, power levels, E/N grid, RATE CONST and SUPER RATE distribution analysis.
-- [dataset/1_data_cleaning_scaling_and_preprocessing.md](dataset/1_data_cleaning_scaling_and_preprocessing.md)
+- [dataset/0_data_cleaning_scaling_and_preprocessing.md](dataset/0_data_cleaning_scaling_and_preprocessing.md)
   - Data cleaning, train-only preprocessing, input scaling, output log transforms, and why `epsilon` is used.
+- [dataset/1_v03_dataset_analysis_report.md](dataset/1_v03_dataset_analysis_report.md)
+  - V03 raw data structure, power levels, E/N grid, RATE CONST and SUPER RATE distribution analysis.
 
 ## 1. Model Definitions
 
-- [models/0_model_name_notations.md](models/0_model_name_notations.md)
+- [models/0_Model Definitions.md](models/0_Model%20Definitions.md)
   - Short labels used in figures and reports, including separate-task, direct, latent, and joint-model notation.
 
 ## 2. Experiment Execution
