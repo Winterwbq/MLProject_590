@@ -1,22 +1,24 @@
 # Documentation Guide
 
-This folder has been reorganized to keep active materials clean and move repetitive or legacy content out of the way.
-
-## Folder Layout
-
-- `docs/active_v02/`: current, canonical documentation for `NERS590_data_v02`
-- `docs/active_v03/`: current, canonical documentation for `dataset/NERS590_data_V03`
-- `docs/archive_generated_reports/`: archived run-level auto-generated report references
-- `docs/legacy_global_kin/`: legacy documentation for the abandoned `global_kin_boltz.out` direction
+This folder is organized around the current V03 project. The older V02 and original global-kin materials are preserved under `docs/archive/`, while the useful V03-facing notes are extracted into `docs/v03/` with ordered filenames.
 
 ## Start Here
 
-For the current v03 project direction, open [active_v03/README.md](/Users/bingqingwang/Desktop/UMich/590_Machine%20learning/project/docs/active_v03/README.md).
+- [V03 documentation index](v03/README.md)
+- [Scripts guide](../scripts/README.md)
+- [Results guide](../results/README.md)
 
-For the v02 history, open [active_v02/README.md](/Users/bingqingwang/Desktop/UMich/590_Machine%20learning/project/docs/active_v02/README.md).
+## Folder Layout
 
-For generated result-folder conventions, open [results/README.md](/Users/bingqingwang/Desktop/UMich/590_Machine%20learning/project/results/README.md).
-
-For archived run-report references, open [archive_generated_reports/README.md](/Users/bingqingwang/Desktop/UMich/590_Machine%20learning/project/docs/archive_generated_reports/README.md).
-
-For legacy history, open [legacy_global_kin/README.md](/Users/bingqingwang/Desktop/UMich/590_Machine%20learning/project/docs/legacy_global_kin/README.md).
+- `v03/dataset/`
+  - Dataset structure, data cleaning, scaling, preprocessing, and input/output analysis.
+- `v03/models/`
+  - Model notation and model-family explanations.
+- `v03/experiments/`
+  - Code/run guide, training protocol, and experiment execution reports.
+- `v03/results/`
+  - Final paper-style V03 result analysis and conclusions.
+- `v03/ideas/`
+  - Useful V02 and legacy ideas that informed the V03 experiment design.
+- `archive/`
+  - Full older documentation that is not part of the active V03 reading path.

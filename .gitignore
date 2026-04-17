@@ -13,6 +13,7 @@ node_modules
 dist
 build
 coverage
+pptx/
 project/results/ners590_v03_multitask
 
 __pycache__
