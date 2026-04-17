@@ -1,14 +1,14 @@
 from __future__ import annotations
 
-import importlib.util
 import re
-import sys
 import time
 from dataclasses import dataclass
 from pathlib import Path
 from types import ModuleType
 
 import pandas as pd
+
+from . import raw_parser
 
 
 REQUIRED_PARSED_TABLES = {
@@ -46,19 +46,14 @@ class ParsedDataset:
     training_targets: pd.DataFrame
 
 
-def _repo_root() -> Path:
-    return Path(__file__).resolve().parents[2]
-
-
 def _load_legacy_parser_module() -> ModuleType:
-    parser_path = _repo_root() / "scripts" / "global_kin_dataset.py"
-    spec = importlib.util.spec_from_file_location("legacy_global_kin_dataset", parser_path)
-    if spec is None or spec.loader is None:
-        raise ImportError(f"Could not load parser module from {parser_path}")
-    module = importlib.util.module_from_spec(spec)
-    sys.modules[spec.name] = module
-    spec.loader.exec_module(module)
-    return module
+    """Return the raw `.out` parser module.
+
+    The parser used to live in `scripts/global_kin_dataset.py`. After the
+    script cleanup, reusable parser logic belongs in `src/global_kin_ml`, so
+    training and analysis entrypoints no longer depend on a script-side helper.
+    """
+    return raw_parser
 
 
 def _power_metadata_from_path(raw_path: Path) -> dict[str, object]:
